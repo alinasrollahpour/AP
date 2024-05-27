@@ -33,7 +33,7 @@ public class Teacher
         return password;
     }
     
-    int getLessonNumber()
+    int getCourseNumber()
     {
         return courses.size();
     }

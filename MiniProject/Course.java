@@ -109,9 +109,9 @@ public class Course
         assignments.remove(assignment);
     }
 
-    public int getMaxScore()
+    public Double getMaxScore()
     {
-        return students.stream().map(s -> s.getScoreOfCourse(this)).max((x, y) -> x.compareTo(y)).orElse(0);
+        return students.stream().map(s -> s.getScoreOfCourse(this)).max((x, y) -> x.compareTo(y)).orElse(0.0);
     }
 
     @Override

@@ -16,8 +16,9 @@ class LoginPage extends StatelessWidget {
             RoundedContainer(
                 backgroundColor: Colors.white,
                 child: RoundedTextField(
-                  hintText: 'شماره دانشجویی',
-                  fillColor: Colors.white,
+                  labelText: 'شماره دانشجویی',
+                  controller: TextEditingController(),
+                  icon: Icon(Icons.account_circle_outlined),
                 ))
           ],
         ),

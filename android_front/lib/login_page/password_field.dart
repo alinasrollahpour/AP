@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
-class RoundedTextField extends StatelessWidget {
+class RoundedTextField extends StatefulWidget{
+  @override
+  _RoundedTextFieldState createState() => _RoundedTextFieldState();
+}
+
+class _RoundedTextFieldState extends State<RoundedTextField> {
   final TextEditingController? controller;
   final String? labelText;
   final Color borderColor;
@@ -12,7 +17,7 @@ class RoundedTextField extends StatelessWidget {
   final Icon? icon;
   final bool obscureText;
 
-  const RoundedTextField({
+  _RoundedTextFieldState({
     Key? key,
     this.controller,
     this.labelText,
@@ -24,7 +29,7 @@ class RoundedTextField extends StatelessWidget {
     this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     this.icon,
     this.obscureText = false,
-  }) : super(key: key);
+  }) : super();
 
   @override
   Widget build(BuildContext context) {

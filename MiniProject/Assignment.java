@@ -3,7 +3,7 @@ package MiniProject;
 public class Assignment
 {
     private Course course;
-    private int deadline;
+    private String deadline;
     private boolean isActive;
 
     public Assignment(Course course)
@@ -12,7 +12,7 @@ public class Assignment
         this.isActive = false;
     }
 
-    public Assignment(Course course, int deadline)
+    public Assignment(Course course, String deadline)
     {
         this(course);
         this.deadline = deadline;
@@ -24,7 +24,7 @@ public class Assignment
         return course;
     }
 
-    public int getDeadline()
+    public String getDeadline()
     {
         return deadline;
     }
@@ -34,7 +34,7 @@ public class Assignment
         return isActive;
     }
 
-    public void setDeadline(int deadline)
+    public void setDeadline(String deadline)
     {
         isActive = true;
         this.deadline = deadline;
@@ -43,7 +43,7 @@ public class Assignment
     public void inactive()
     {
         isActive = false;
-        deadline = 0;
+        deadline = null;
     }
 
     @Override
