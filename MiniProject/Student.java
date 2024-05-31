@@ -1,13 +1,13 @@
-package MiniProject;
+package AP.MiniProject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Student
 {
-    private String name;
+    private final String name;
     private int term;
-    private String studentId;
+    private final String studentId;
     private String password;
     private Map<Course, Double> termCourses = new HashMap<Course, Double>();
     private Map<Course, Double> passedCourses = new HashMap<Course, Double>();
@@ -68,12 +68,12 @@ public class Student
 
     double getTermAverage()
     {
-        if(termCourses.size() == 0)
+        if(termCourses.isEmpty())
         {
             return -1;
         }
 
-        int sum = 0;
+        double sum = 0;
         int num = 0;
 
         for(Object obj: termCourses.keySet().toArray())
@@ -87,7 +87,7 @@ public class Student
             }
         }
 
-        return sum / (double)num;
+        return sum / num;
     }
 
     double getTotalAverage()
@@ -97,8 +97,7 @@ public class Student
             return -1;
         }
 
-        int sum = 0;
-        int num = passedCourses.size();
+        double sum = 0;
 
         for(Object obj: passedCourses.keySet().toArray())
         {
@@ -107,7 +106,7 @@ public class Student
             sum += c.getUnit() * passedCourses.get(c);
         }
 
-        return sum / (double)num;
+        return sum / passedCourses.size();
     }
 
     void setPassword(String password)
@@ -117,12 +116,12 @@ public class Student
 
     int getTermUnitNumber()
     {
-        return termCourses.keySet().stream().map(c -> c.getUnit()).reduce((a, b) -> a + b).orElse(0);
+        return termCourses.keySet().stream().map(Course::getUnit).reduce(Integer::sum).orElse(0);
     }
 
     int getPassedUnitNumber()
     {
-        return passedCourses.keySet().stream().map(c -> c.getUnit()).reduce((a, b) -> a + b).orElse(0);
+        return passedCourses.keySet().stream().map(Course::getUnit).reduce(Integer::sum).orElse(0);
     }
 
     void printTermCourses()
@@ -177,13 +176,6 @@ public class Student
         }
         Student student = (Student)obj;
 
-        if(studentId.equals(student.getStudentId()) && name.equals(student.getName()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+		return studentId.equals(student.getStudentId()) && name.equals(student.getName());
     }
 }

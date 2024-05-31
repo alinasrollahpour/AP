@@ -1,22 +1,31 @@
-package MiniProject;
+package AP.MiniProject;
+
+import java.util.Date;
 
 public class Assignment
 {
-    private Course course;
-    private String deadline;
+    private String detail;
+    private final Course course;
+    private Date deadline;
     private boolean isActive;
 
-    public Assignment(Course course)
+    public Assignment(String detail, Course course)
     {
+        this.detail = detail;
         this.course = course;
         this.isActive = false;
     }
 
-    public Assignment(Course course, String deadline)
+    public Assignment(String detail, Course course, Date deadline)
     {
-        this(course);
+        this(detail, course);
         this.deadline = deadline;
         this.isActive = true;
+    }
+
+    public String getDetail()
+    {
+        return detail;
     }
 
     public Course getCourse()
@@ -24,7 +33,7 @@ public class Assignment
         return course;
     }
 
-    public String getDeadline()
+    public Date getDeadline()
     {
         return deadline;
     }
@@ -34,7 +43,12 @@ public class Assignment
         return isActive;
     }
 
-    public void setDeadline(String deadline)
+    public void setDetail(String detail)
+    {
+        this.detail = detail;
+    }
+
+    public void setDeadline(Date deadline)
     {
         isActive = true;
         this.deadline = deadline;
@@ -47,21 +61,14 @@ public class Assignment
     }
 
     @Override
-    public boolean equals(Object obj)
+    public boolean equals(Object o)
     {
-        if(!(obj instanceof Assignment))
-        {
-            return false;
-        }
-        Assignment assignment = (Assignment)obj;
-
-        if(assignment.getCourse().equals(course) && assignment.getDeadline() == deadline && assignment.isActive() == isActive)
-        {
+        if (this == o)
             return true;
-        }
-        else
-        {
+        if (o == null || getClass() != o.getClass())
             return false;
-        }
+
+        Assignment that = (Assignment) o;
+        return deadline == that.deadline && isActive == that.isActive && detail.equals(that.detail) && course.equals(that.course);
     }
 }

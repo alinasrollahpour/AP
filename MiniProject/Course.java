@@ -1,20 +1,18 @@
-package MiniProject;
+package AP.MiniProject;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class Course
 {
-    private String name;
+    private final String name;
     private Teacher teacher;
     private String courseId;
-    private int unit;
+    private final int unit;
     private Set<Student> students = new HashSet<Student>();
-    private List<Assignment> assignments = new LinkedList<Assignment>();
-    private String examDate;
+    private Set<Assignment> assignments = new HashSet<Assignment>();
+    private Date examDate;
     private boolean isActive;
 
     public Course(String name, int unit)
@@ -24,7 +22,7 @@ public class Course
         isActive = false;
     }
 
-    public Course(String name, Teacher teacher, String courseId, int unit, String examDate)
+    public Course(String name, Teacher teacher, String courseId, int unit, Date examDate)
     {
         this(name, unit);
         this.teacher = teacher;
@@ -58,7 +56,7 @@ public class Course
         return isActive;
     }
 
-    public String getExamDate()
+    public Date getExamDate()
     {
         return examDate;
     }
@@ -68,12 +66,12 @@ public class Course
         return students.size();
     }
 
-    public void setExamDate(String examDate)
+    public void setExamDate(Date examDate)
     {
         this.examDate = examDate;
     }
 
-    public void activeCourse(Teacher teacher, String courseId, String examDate)
+    public void activeCourse(Teacher teacher, String courseId, Date examDate)
     {
         if(!isActive)
         {
@@ -84,9 +82,20 @@ public class Course
         }
     }
 
+    public void inactiveCourse()
+    {
+        if(isActive)
+        {
+            isActive = false;
+            teacher = null;
+            courseId = null;
+            examDate = null;
+        }
+    }
+
     public void printStudents()
     {
-        students.stream().forEach(s -> System.out.println(s.getName()));
+        students.forEach(s -> System.out.println(s.getName()));
     }
 
     public void addStudent(Student student)
@@ -111,7 +120,7 @@ public class Course
 
     public Double getMaxScore()
     {
-        return students.stream().map(s -> s.getScoreOfCourse(this)).max((x, y) -> x.compareTo(y)).orElse(0.0);
+        return students.stream().map(s -> s.getScoreOfCourse(this)).max(Double::compareTo).orElse(0.0);
     }
 
     @Override
@@ -123,13 +132,6 @@ public class Course
         }
         Course course = (Course)obj;
 
-        if(courseId.equals(course.getCourseId()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+		return courseId.equals(course.getCourseId());
     }
 }

@@ -1,20 +1,20 @@
-package MiniProject;
+package AP.MiniProject;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class Teacher
 {
-    private String name;
-    private String teacherId;
-    private String password;
-    private List<Course> courses = new LinkedList<Course>();
+    private final String name;
+    private final String teacherId;
+    private Set<Course> courses = new HashSet<Course>();
 
-    public Teacher(String name, String teacherId, String password, List<Course> courses)
+    public Teacher(String name, String teacherId, Set<Course> courses)
     {
         this.name = name;
         this.teacherId = teacherId;
-        this.password = password;
         this.courses = courses;
     }
 
@@ -28,25 +28,26 @@ public class Teacher
         return teacherId;
     }
 
-    String getPassword()
-    {
-        return password;
-    }
-    
-    int getCourseNumber()
+    int getLessonNumber()
     {
         return courses.size();
     }
     
-    List<Course> getCourses()
+    Set<Course> getCourses()
     {
         return courses;
     }
 
-    void setPassword(String password)
+    void addCourse(Course course)
     {
-        this.password = password;
+        courses.add(course);
     }
+
+    void deleteCourse(Course course)
+    {
+        courses.remove(course);
+    }
+
 
     @Override
     public boolean equals(Object obj)
@@ -57,13 +58,6 @@ public class Teacher
         }
         Teacher teacher = (Teacher)obj;
 
-        if(teacherId.equals(teacher.getTeacherId()) && name.equals(teacher.getName()))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+		return teacherId.equals(teacher.getTeacherId()) && name.equals(teacher.getName());
     }
 }
