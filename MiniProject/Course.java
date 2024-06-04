@@ -1,4 +1,4 @@
-package AP.MiniProject;
+package MiniProject;
 
 import java.util.Date;
 import java.util.HashSet;

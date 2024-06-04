@@ -1,72 +1,87 @@
-package AP.MiniProject;
+package MiniProject;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Student
 {
     private final String name;
+    private String userName;
+    private Date birthday;
     private int term;
     private final String studentId;
     private String password;
     private Map<Course, Double> termCourses = new HashMap<Course, Double>();
     private Map<Course, Double> passedCourses = new HashMap<Course, Double>();
 
-    public Student(String name, String studentId, String password)
+    public Student(String name, String userName, Date birthday, String studentId, String password)
     {
         this.name = name;
         this.studentId = studentId;
         this.password = password;
+        this.userName = userName;
+        this.birthday = birthday;
         term = 1;
     }
 
-    public Student(String name, String studentId, String password, int term)
+    public Student(String name, String userName, Date birthday, String studentId, String password, int term)
     {
-        this(name, studentId, password);
+        this(name, userName, birthday, studentId, password);
         this.term = term;
     }
 
-    String getName()
+    public String getName()
     {
         return name;
     }
 
-    int getTerm()
+    public String getUserName()
+    {
+        return userName;
+    }
+
+    public Date getBirthday()
+    {
+        return birthday;
+    }
+
+    public int getTerm()
     {
         return term;
     }
 
-    Course[] getTermCourses()
+    public Course[] getTermCourses()
     {
         return (Course[])termCourses.keySet().toArray();
     }
 
-    Course[] getPassedCourses()
+    public Course[] getPassedCourses()
     {
         return (Course[])passedCourses.keySet().toArray();
     }
 
-    int getTermCoursesNumber()
+    public int getTermCoursesNumber()
     {
         return termCourses.size();
     }
 
-    int getPassedCoursesNumber()
+    public int getPassedCoursesNumber()
     {
         return passedCourses.size();
     }
 
-    String getStudentId()
+    public String getStudentId()
     {
         return studentId;
     }
-    
-    String getPassword()
+
+    public String getPassword()
     {
         return password;
     }
 
-    double getTermAverage()
+    public double getTermAverage()
     {
         if(termCourses.isEmpty())
         {
@@ -90,7 +105,7 @@ public class Student
         return sum / num;
     }
 
-    double getTotalAverage()
+    public double getTotalAverage()
     {
         if(term == 1)
         {
@@ -109,42 +124,57 @@ public class Student
         return sum / passedCourses.size();
     }
 
-    void setPassword(String password)
+    public void setUserName(String userName)
+    {
+        this.userName = userName;
+    }
+
+    public void setBirthday(Date birthday)
+    {
+        this.birthday = birthday;
+    }
+
+    public void setTerm(int term)
+    {
+        this.term = term;
+    }
+
+    public void setPassword(String password)
     {
         this.password = password;
     }
 
-    int getTermUnitNumber()
+    public int getTermUnitNumber()
     {
         return termCourses.keySet().stream().map(Course::getUnit).reduce(Integer::sum).orElse(0);
     }
 
-    int getPassedUnitNumber()
+    public int getPassedUnitNumber()
     {
         return passedCourses.keySet().stream().map(Course::getUnit).reduce(Integer::sum).orElse(0);
     }
 
-    void printTermCourses()
+    public void printTermCourses()
     {
         termCourses.keySet().stream().sorted((c1, c2) -> c1.getName().compareTo(c2.getName())).forEach(c -> System.out.println(c.getName()));
     }
 
-    void printPassedCourses()
+    public void printPassedCourses()
     {
         passedCourses.keySet().stream().sorted((c1, c2) -> c1.getName().compareTo(c2.getName())).forEach(c -> System.out.println(c.getName()));
     }
 
-    void addCourse(Course course)
+    public void addCourse(Course course)
     {
         termCourses.put(course, null);
     }
 
-    void addPassedCourse(Course course, double score)
+    public void addPassedCourse(Course course, double score)
     {
         passedCourses.put(course, score);
     }
 
-    void deleteTermCourse(Course course)
+    public void deleteTermCourse(Course course)
     {
         termCourses.remove(course);
     }
@@ -154,7 +184,7 @@ public class Student
         passedCourses.remove(course);
     }
 
-    Double getScoreOfCourse(Course course)
+    public Double getScoreOfCourse(Course course)
     {
         if(passedCourses.containsKey(course))
         {
