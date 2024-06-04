@@ -58,13 +58,13 @@ dev_dependencies:
 flutter:
 
   fonts:
-    - family: OpenSans
+    - family: IRANSans
       fonts:
         - asset: assets/fonts/IRANSansWeb_Bold.ttf
         - asset: assets/fonts/IRANSansWeb_Light.ttf
-          weight: 700
+          #weight: 700
   assets:
-    - assets/fonts/
+    - assets/l.jpg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

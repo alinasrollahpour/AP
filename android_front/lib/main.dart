@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:android_front/profile_page/profile.dart';
 import 'package:android_front/login_page/login.dart';
 import 'package:android_front/signup_page/signup.dart';
 import '/ali_button.dart';
@@ -14,10 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          fontFamily: 'IRANSansWeb', // Set the default font family here
+          fontFamily: 'IRANSans', // Set the default font family here
         ),
         title: 'DaneshjooYar',
-        home: SignupPage()); //LoginPage());
+        home: ProfilePage()); //LoginPage());
   }
 }
 
