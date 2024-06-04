@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
-class RoundedTextField extends StatefulWidget{
-  @override
-  _RoundedTextFieldState createState() => _RoundedTextFieldState();
-}
-
-class _RoundedTextFieldState extends State<RoundedTextField> {
+class PasswordField extends StatefulWidget {
   final TextEditingController? controller;
   final String? labelText;
   final Color borderColor;
@@ -15,9 +10,8 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
   final TextStyle? labelStyle;
   final EdgeInsetsGeometry contentPadding;
   final Icon? icon;
-  final bool obscureText;
 
-  _RoundedTextFieldState({
+  const PasswordField({
     Key? key,
     this.controller,
     this.labelText,
@@ -28,33 +22,49 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
     this.labelStyle,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     this.icon,
-    this.obscureText = false,
-  }) : super();
+  }) : super(key: key);
+
+  @override
+  _PasswordFieldState createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  bool _obscureText = true;
+
+  void _toggleObscureText() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
-      style: textStyle,
-      obscureText: obscureText,
+      controller: widget.controller,
+      style: widget.textStyle,
+      obscureText: _obscureText,
       decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: labelStyle,
-        fillColor: fillColor,
-        contentPadding: contentPadding,
+        labelText: widget.labelText,
+        labelStyle: widget.labelStyle,
+        fillColor: widget.fillColor,
+        contentPadding: widget.contentPadding,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: borderColor),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          borderSide: BorderSide(color: widget.borderColor),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: borderColor),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          borderSide: BorderSide(color: widget.borderColor),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: borderColor),
+          borderRadius: BorderRadius.circular(widget.borderRadius),
+          borderSide: BorderSide(color: widget.borderColor),
         ),
-        prefixIcon: icon,
+        prefixIcon: widget.icon,
+        suffixIcon: IconButton(
+          icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+          onPressed: _toggleObscureText,
+        ),
       ),
     );
   }

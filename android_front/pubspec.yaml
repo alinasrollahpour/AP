@@ -18,6 +18,9 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
 
+
+
+
 environment:
   sdk: '>=3.3.3 <4.0.0'
 
@@ -51,7 +54,17 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
 flutter:
+
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/IRANSansWeb_Bold.ttf
+        - asset: assets/fonts/IRANSansWeb_Light.ttf
+          weight: 700
+  assets:
+    - assets/fonts/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
