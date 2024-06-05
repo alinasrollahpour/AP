@@ -34,11 +34,11 @@ class LoginPage extends StatelessWidget {
               ],
             )),
         RoundedButton(
-          text: "ورود",
+          text: "   ورود   ",
           onPressed: () {},
           textColor: Colors.white,
           color: Colors.blueAccent,
-          fontSize: 26,
+          fontSize: 30,
         ),
         Padding(
           padding: EdgeInsets.all(15),

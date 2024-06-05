@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
             // Get the TextDirection based on the locale
             final TextDirection textDirection = Directionality.of(context);
 
-            return ProfilePage();
+            return LoginPage();
           },
         )); //LoginPage());
   }
