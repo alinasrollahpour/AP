@@ -1,6 +1,5 @@
 package MiniProject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,14 +7,14 @@ public class Student
 {
     private final String name;
     private String userName;
-    private Date birthday;
+    private String birthday;
     private int term;
     private final String studentId;
     private String password;
     private Map<Course, Double> termCourses = new HashMap<Course, Double>();
     private Map<Course, Double> passedCourses = new HashMap<Course, Double>();
 
-    public Student(String name, String userName, Date birthday, String studentId, String password)
+    public Student(String name, String userName, String birthday, String studentId, String password)
     {
         this.name = name;
         this.studentId = studentId;
@@ -25,7 +24,7 @@ public class Student
         term = 1;
     }
 
-    public Student(String name, String userName, Date birthday, String studentId, String password, int term)
+    public Student(String name, String userName, String birthday, String studentId, String password, int term)
     {
         this(name, userName, birthday, studentId, password);
         this.term = term;
@@ -41,7 +40,7 @@ public class Student
         return userName;
     }
 
-    public Date getBirthday()
+    public String getBirthday()
     {
         return birthday;
     }
@@ -129,7 +128,7 @@ public class Student
         this.userName = userName;
     }
 
-    public void setBirthday(Date birthday)
+    public void setBirthday(String birthday)
     {
         this.birthday = birthday;
     }

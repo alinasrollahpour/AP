@@ -1,12 +1,10 @@
 package MiniProject;
 
-import java.util.Date;
-
 public class Assignment
 {
     private String detail;
     private final Course course;
-    private Date deadline;
+    private String deadline;
     private boolean isActive;
 
     public Assignment(String detail, Course course)
@@ -16,7 +14,7 @@ public class Assignment
         this.isActive = false;
     }
 
-    public Assignment(String detail, Course course, Date deadline)
+    public Assignment(String detail, Course course, String deadline)
     {
         this(detail, course);
         this.deadline = deadline;
@@ -33,7 +31,7 @@ public class Assignment
         return course;
     }
 
-    public Date getDeadline()
+    public String getDeadline()
     {
         return deadline;
     }
@@ -48,7 +46,7 @@ public class Assignment
         this.detail = detail;
     }
 
-    public void setDeadline(Date deadline)
+    public void setDeadline(String deadline)
     {
         isActive = true;
         this.deadline = deadline;

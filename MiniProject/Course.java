@@ -1,6 +1,5 @@
 package MiniProject;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,7 +11,7 @@ public class Course
     private final int unit;
     private Set<Student> students = new HashSet<Student>();
     private Set<Assignment> assignments = new HashSet<Assignment>();
-    private Date examDate;
+    private String examDate;
     private boolean isActive;
 
     public Course(String name, int unit)
@@ -22,7 +21,7 @@ public class Course
         isActive = false;
     }
 
-    public Course(String name, Teacher teacher, String courseId, int unit, Date examDate)
+    public Course(String name, Teacher teacher, String courseId, int unit, String examDate)
     {
         this(name, unit);
         this.teacher = teacher;
@@ -56,7 +55,7 @@ public class Course
         return isActive;
     }
 
-    public Date getExamDate()
+    public String getExamDate()
     {
         return examDate;
     }
@@ -66,12 +65,12 @@ public class Course
         return students.size();
     }
 
-    public void setExamDate(Date examDate)
+    public void setExamDate(String examDate)
     {
         this.examDate = examDate;
     }
 
-    public void activeCourse(Teacher teacher, String courseId, Date examDate)
+    public void activeCourse(Teacher teacher, String courseId, String examDate)
     {
         if(!isActive)
         {

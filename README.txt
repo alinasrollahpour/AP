@@ -1,3 +1,8 @@
 AP final project.
-start: 2024-May
+Shahid Beheshti Univ.
+
+started: 2024-May
+
 Developers: 
+  *Ali Nasrollahpour
+  *Ali Zolfaghari
