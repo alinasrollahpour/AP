@@ -5,7 +5,7 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(alignment: Alignment.center, children: [
       CircleAvatar(
-        radius: 100, // This sets the size of the circular avatar
+        radius: 30, // This sets the size of the circular avatar
         backgroundImage: AssetImage('assets/l.jpg'), // Path to the local image
       ),
       Positioned(

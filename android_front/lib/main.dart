@@ -13,12 +13,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        locale: Locale('ar', 'AE'),
+
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'IRANSans', // Set the default font family here
         ),
         title: 'DaneshjooYar',
-        home: ProfilePage()); //LoginPage());
+        home: Builder(
+          builder: (BuildContext context) {
+            // Get the TextDirection based on the locale
+            final TextDirection textDirection = Directionality.of(context);
+
+            return ProfilePage();
+          },
+        )); //LoginPage());
   }
 }
 
