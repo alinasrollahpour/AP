@@ -1,24 +1,33 @@
 package MiniProject;
 
+import java.util.Objects;
+
 public class Assignment
 {
+    private String assignmentId;
     private String detail;
     private final Course course;
     private String deadline;
     private boolean isActive;
 
-    public Assignment(String detail, Course course)
+    public Assignment(String assignmentId, String detail, Course course)
     {
+        this.assignmentId = assignmentId;
         this.detail = detail;
         this.course = course;
         this.isActive = false;
     }
 
-    public Assignment(String detail, Course course, String deadline)
+    public Assignment(String assignmentId, String detail, Course course, String deadline)
     {
-        this(detail, course);
+        this(assignmentId, detail, course);
         this.deadline = deadline;
         this.isActive = true;
+    }
+
+    public String getAssignmentId()
+    {
+        return assignmentId;
     }
 
     public String getDetail()
@@ -61,12 +70,14 @@ public class Assignment
     @Override
     public boolean equals(Object o)
     {
-        if (this == o)
+        if(this == o)
             return true;
-        if (o == null || getClass() != o.getClass())
+
+        if(o == null || getClass() != o.getClass())
             return false;
 
         Assignment that = (Assignment) o;
-        return deadline == that.deadline && isActive == that.isActive && detail.equals(that.detail) && course.equals(that.course);
+
+        return assignmentId.equals(that.assignmentId);
     }
 }
