@@ -21,8 +21,8 @@ public class Cli
 
 		System.out.println(ANSI_GREEN + "Welcome!\n" + ANSI_RESET);
 		System.out.println("What is your role?");
-		System.out.println("\t\t1.Admin");
-		System.out.println("\t\t2.Teacher");
+		System.out.println("\t\t1. Admin");
+		System.out.println("\t\t2. Teacher");
 		System.out.print(ANSI_BLUE + "Please Enter 1 or 2: " + ANSI_RESET);
 
 		String oneOrTwo = input.next();
@@ -33,8 +33,8 @@ public class Cli
 			System.out.flush();
 
 			System.out.println("What is your role?");
-			System.out.println("\t\t1.Admin");
-			System.out.println("\t\t2.Teacher");
+			System.out.println("\t\t1. Admin");
+			System.out.println("\t\t2. Teacher");
 			System.out.print(ANSI_RED + "Inputted character is incorrect!" + ANSI_BLUE + " Please Enter 1 or 2: " + ANSI_RESET);
 			oneOrTwo = input.next();
 		}
@@ -44,7 +44,83 @@ public class Cli
 		{
 			System.out.println(ANSI_GREEN + "\nWelcome Admin!\n" + ANSI_RESET);
 
+			boolean flag = true;
 
+			input.nextLine();
+			while(flag)
+			{
+				System.out.println(ANSI_BLUE + "Menu:");
+				System.out.println("\t1. Adding teacher");
+				System.out.println("\t2. Deleting teacher");
+				System.out.println("\t3. Adding course");
+				System.out.println("\t4. Deleting course");
+				System.out.println("\t5. Adding assignment");
+				System.out.println("\t6. Deleting assignment");
+				System.out.println("\t7. Adding student to course");
+				System.out.println("\t8. deleting student from course");
+				System.out.println("\t9. Set/Reset deadline of an assignment");
+				System.out.println("\t10. Deactivate an assignment");
+				System.out.println("\t0. Exit\n" + ANSI_RESET);
+
+				System.out.print("Please enter a number between 0 and : ");
+
+				switch(input.nextLine())
+				{
+				case "1":
+
+					break;
+
+				case "2":
+
+
+					break;
+
+				case "3":
+
+
+					break;
+
+				case "4":
+
+
+
+				break;
+
+				case "5":
+
+
+
+					break;
+
+				case "6":
+
+
+
+					break;
+
+				case "7":
+
+
+
+					break;
+
+				case "8":
+
+
+
+					break;
+
+				case "0":
+
+					flag = false;
+
+					break;
+
+				default:
+
+					System.out.println(ANSI_RED + "Error: Your number must be between 0 and ." + ANSI_RESET);
+				}
+			}
 		}
 		// Teacher
 		else
