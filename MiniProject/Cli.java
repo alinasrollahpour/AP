@@ -1,6 +1,9 @@
 package MiniProject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -19,7 +22,7 @@ public class Cli
 		System.out.println(ANSI_GREEN + "Welcome!\n" + ANSI_RESET);
 		System.out.println("What is your role?");
 		System.out.println("\t\t1.Admin");
-		System.out.println("\t\t2.c");
+		System.out.println("\t\t2.Teacher");
 		System.out.print(ANSI_BLUE + "Please Enter 1 or 2: " + ANSI_RESET);
 
 		String oneOrTwo = input.next();
@@ -39,7 +42,8 @@ public class Cli
 		// Admin
 		if(oneOrTwo.equals("1"))
 		{
-			System.out.println(ANSI_GREEN + "Welcome Admin!\n" + ANSI_RESET);
+			System.out.println(ANSI_GREEN + "\nWelcome Admin!\n" + ANSI_RESET);
+
 
 		}
 		// Teacher
@@ -47,12 +51,44 @@ public class Cli
 		{
 			System.out.print("Please Enter your teacher ID: ");
 			String teacherId = input.next();
+			String teacherName = null;
 
-//			File teacherFile = new File(".\\Files\\TeacherFile.txt");
-//			try(Scanner scanner = new Scanner(teacherFile))
-//			{
-//
-//			}
+			try(RandomAccessFile reader = new RandomAccessFile(new File("E:\\MyWorkspace\\AP_Project\\AP\\MiniProject\\Files\\teachers.txt"), "r"))
+			{
+				boolean isCorrect = false;
+
+				while(!isCorrect)
+				{
+					String line;
+					String[] info;
+
+					while((line = reader.readLine()) != null)
+					{
+						info = line.split("~");
+
+						if(teacherId.equals(info[0]))
+						{
+							teacherName = info[1];
+							isCorrect = true;
+							break;
+						}
+					}
+
+					if(!isCorrect)
+					{
+						System.out.print(ANSI_RED + "The ID is incorrect! " + ANSI_RESET + "Please Enter your teacher ID: ");
+						teacherId = input.next();
+						reader.seek(0);
+					}
+				}
+			}
+			catch(IOException e)
+			{
+				System.out.println(e.getMessage());
+				return;
+			}
+
+			System.out.println(ANSI_GREEN + "\nWelcome " + teacherName + "!\n" + ANSI_RESET);
 		}
 
 

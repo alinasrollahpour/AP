@@ -2,16 +2,16 @@
 Hirarchy:
 
 /DB/
-    /teachrs.txt
+    /teachers.txt
     /students.txt
     /courses.txt
     /assignments.txt
 
 File structure:
 
-teachrs.txt:
+teachers.txt:
 
-    teachr_id~teachr_name~course1_id/course2_id/course3_id~...
+    teacher_id~teacher_name~course1_id/course2_id/course3_id~...
 
 students.txt:
 
