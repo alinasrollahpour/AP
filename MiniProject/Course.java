@@ -7,25 +7,25 @@ public class Course
 {
     private final String name;
     private Teacher teacher;
-    private String courseId;
+    private final String courseId;
     private final int unit;
     private Set<Student> students = new HashSet<Student>();
     private Set<Assignment> assignments = new HashSet<Assignment>();
     private String examDate;
     private boolean isActive;
 
-    public Course(String name, int unit)
+    public Course(String name, String courseId, int unit)
     {
         this.name = name;
+        this.courseId = courseId;
         this.unit = unit;
         isActive = false;
     }
 
     public Course(String name, Teacher teacher, String courseId, int unit, String examDate)
     {
-        this(name, unit);
+        this(name, courseId, unit);
         this.teacher = teacher;
-        this.courseId = courseId;
         this.examDate = examDate;
         isActive = true;
     }
@@ -70,13 +70,12 @@ public class Course
         this.examDate = examDate;
     }
 
-    public void activeCourse(Teacher teacher, String courseId, String examDate)
+    public void activeCourse(Teacher teacher, String examDate)
     {
         if(!isActive)
         {
             isActive = true;
             this.teacher = teacher;
-            this.courseId = courseId;
             this.examDate = examDate;
         }
     }
@@ -87,7 +86,6 @@ public class Course
         {
             isActive = false;
             teacher = null;
-            courseId = null;
             examDate = null;
         }
     }

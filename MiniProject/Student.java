@@ -178,7 +178,7 @@ public class Student
         termCourses.remove(course);
     }
 
-    void deletePassedCourse(Course course)
+    public void deletePassedCourse(Course course)
     {
         passedCourses.remove(course);
     }
