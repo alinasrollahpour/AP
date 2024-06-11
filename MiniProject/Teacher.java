@@ -1,15 +1,16 @@
 package MiniProject;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class Teacher
+public class Teacher implements Serializable
 {
     private final String name;
     private final String teacherId;
-    private Set<Course> courses = new HashSet<Course>();
+    private Set<Course> courses = new HashSet<>();
 
     public Teacher(String name, String teacherId, Set<Course> courses)
     {

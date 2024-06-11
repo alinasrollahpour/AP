@@ -1,9 +1,10 @@
 package MiniProject;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Student
+public class Student implements Serializable
 {
     private final String name;
     private String userName;
@@ -11,8 +12,8 @@ public class Student
     private int term;
     private final String studentId;
     private String password;
-    private Map<Course, Double> termCourses = new HashMap<Course, Double>();
-    private Map<Course, Double> passedCourses = new HashMap<Course, Double>();
+    private Map<Course, Double> termCourses = new HashMap<>();
+    private Map<Course, Double> passedCourses = new HashMap<>();
 
     public Student(String name, String userName, String birthday, String studentId, String password)
     {

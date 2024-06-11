@@ -1,16 +1,17 @@
 package MiniProject;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Course
+public class Course implements Serializable
 {
     private final String name;
     private Teacher teacher;
     private final String courseId;
     private final int unit;
-    private Set<Student> students = new HashSet<Student>();
-    private Set<Assignment> assignments = new HashSet<Assignment>();
+    private Set<Student> students = new HashSet<>();
+    private Set<Assignment> assignments = new HashSet<>();
     private String examDate;
     private boolean isActive;
 

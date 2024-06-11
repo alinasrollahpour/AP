@@ -1,8 +1,8 @@
 package MiniProject;
 
-import java.util.Objects;
+import java.io.Serializable;
 
-public class Assignment
+public class Assignment implements Serializable
 {
     private String assignmentId;
     private String detail;
