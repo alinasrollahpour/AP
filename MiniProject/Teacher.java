@@ -1,8 +1,6 @@
 package MiniProject;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 public class Teacher
@@ -28,7 +26,7 @@ public class Teacher
         return teacherId;
     }
 
-    public int getLessonNumber()
+    public int getCoursesNumber()
     {
         return courses.size();
     }
@@ -43,7 +41,7 @@ public class Teacher
         courses.add(course);
     }
 
-    public void deleteCourse(Course course)
+    public void removeCourse(Course course)
     {
         courses.remove(course);
     }
