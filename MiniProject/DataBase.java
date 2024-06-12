@@ -63,7 +63,48 @@ public class DataBase
 		fos.close();
 	}
 
-	private static Set<Course> courseLoader() throws IOException, ClassNotFoundException
+	public static void addTeacher(Teacher teacher) throws IOException, ClassNotFoundException
+	{
+		Set<Teacher> teachers = new HashSet<>();
+		try
+		{
+			teachers = teacherLoader();
+		}
+		catch(EOFException _)
+		{}
+		finally
+		{
+			for(Teacher t: teachers)
+			{
+				if(t.equals(teacher))
+					return;
+			}
+
+			teachers.add(teacher);
+		}
+		FileOutputStream fos = new FileOutputStream("Files/teachers.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+		oos.writeObject(teachers);
+
+		oos.close();
+		fos.close();
+	}
+
+	public static Set<Teacher> teacherLoader() throws IOException, ClassNotFoundException
+	{
+		FileInputStream fis = new FileInputStream("Files/teachers.txt");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+
+		Set<Teacher> teachers = (Set<Teacher>)ois.readObject();
+
+		ois.close();
+		fis.close();
+
+		return teachers;
+	}
+
+	public static Set<Course> courseLoader() throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream("Files/courses.txt");
 		ObjectInputStream ois = new ObjectInputStream(fis);
