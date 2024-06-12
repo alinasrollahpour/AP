@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:android_front/profile_page/profile.dart';
 import 'package:android_front/login_page/login.dart';
 import 'package:android_front/signup_page/signup.dart';
-
-class FrontBase {
-
-}
-
-FrontBase base = FrontBase();
+import '/ali_button.dart';
+import '/ali_text_field.dart';
 
 void main() {
   runApp(MyApp());
@@ -29,9 +25,7 @@ class MyApp extends StatelessWidget {
             // Get the TextDirection based on the locale
             final TextDirection textDirection = Directionality.of(context);
 
-            //return LoginPage();
-            return ProfilePage();
-            //return SignupPage();
+            return LoginPage();
           },
         )); //LoginPage());
   }

@@ -8,7 +8,6 @@ import 'package:android_front/login_page/password_field.dart';
 
 class SignupPage extends StatelessWidget {
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,

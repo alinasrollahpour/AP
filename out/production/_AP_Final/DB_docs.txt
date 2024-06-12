@@ -1,0 +1,27 @@
+
+Hirarchy:
+
+/DB/
+    /teachers.txt
+    /students.txt
+    /courses.txt
+    /assignments.txt
+
+File structure:
+
+teachers.txt:
+
+    teacher_id~teacher_name~course1_id/course2_id/course3_id~...
+
+students.txt:
+
+    student_id~username~password~student_name~term~birth_date~term_course1/term_course2~passed_course1/passed_course2
+
+courses.txt:
+
+    course_id~course_name~teacher_id~unit~exam_date~isActive~assignment1_id/assignment2_id~studnt1_id/studnt2_id
+
+assignments.txt
+
+    assignment_id~course_id~detail~deadline~isActive
+
