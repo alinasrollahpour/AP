@@ -91,17 +91,45 @@ public class DataBase
 		fos.close();
 	}
 
-	public static Set<Teacher> teacherLoader() throws IOException, ClassNotFoundException
+	public static void addAssignment(Assignment assignment) throws IOException, ClassNotFoundException
 	{
-		FileInputStream fis = new FileInputStream("Files/teachers.txt");
+		Set<Assignment> assignments = new HashSet<>();
+		try
+		{
+			assignments = assignmentLoader();
+		}
+		catch(EOFException _)
+		{}
+		finally
+		{
+			for(Assignment a: assignments)
+			{
+				if(a.equals(assignment))
+					return;
+			}
+
+			assignments.add(assignment);
+		}
+		FileOutputStream fos = new FileOutputStream("Files/assignments.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+		oos.writeObject(assignments);
+
+		oos.close();
+		fos.close();
+	}
+
+	public static Set<Student> studentLoader() throws IOException, ClassNotFoundException
+	{
+		FileInputStream fis = new FileInputStream("Files/students.txt");
 		ObjectInputStream ois = new ObjectInputStream(fis);
 
-		Set<Teacher> teachers = (Set<Teacher>)ois.readObject();
+		Set<Student> students = (Set<Student>)ois.readObject();
 
 		ois.close();
 		fis.close();
 
-		return teachers;
+		return students;
 	}
 
 	public static Set<Course> courseLoader() throws IOException, ClassNotFoundException
@@ -117,16 +145,29 @@ public class DataBase
 		return courses;
 	}
 
-	public static Set<Student> studentLoader() throws IOException, ClassNotFoundException
+	public static Set<Teacher> teacherLoader() throws IOException, ClassNotFoundException
 	{
-		FileInputStream fis = new FileInputStream("Files/students.txt");
+		FileInputStream fis = new FileInputStream("Files/teachers.txt");
 		ObjectInputStream ois = new ObjectInputStream(fis);
 
-		Set<Student> students = (Set<Student>)ois.readObject();
+		Set<Teacher> teachers = (Set<Teacher>)ois.readObject();
 
 		ois.close();
 		fis.close();
 
-		return students;
+		return teachers;
+	}
+
+	public static Set<Assignment> assignmentLoader() throws IOException, ClassNotFoundException
+	{
+		FileInputStream fis = new FileInputStream("Files/assignments.txt");
+		ObjectInputStream ois = new ObjectInputStream(fis);
+
+		Set<Assignment> assignments = (Set<Assignment>)ois.readObject();
+
+		ois.close();
+		fis.close();
+
+		return assignments;
 	}
 }
