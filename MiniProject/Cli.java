@@ -55,10 +55,11 @@ public class Cli
 				System.out.println("\t5. Adding assignment");
 				System.out.println("\t6. Deleting assignment");
 				System.out.println("\t7. Adding student to course");
-				System.out.println("\t8. deleting student from course");
-				System.out.println("\t9. Set/Reset deadline of an assignment");
+				System.out.println("\t8. Deleting student from course");
+				System.out.println("\t9. Set deadline of an assignment");
 				System.out.println("\t10. Deactivate an assignment");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
+				//add to passed course
 
 				System.out.print("Please enter a number between 0 and : ");
 
