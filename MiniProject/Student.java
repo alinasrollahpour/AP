@@ -12,8 +12,8 @@ public class Student implements Serializable
     private int term;
     private final String studentId;
     private String password;
-    private Map<Course, Double> termCourses = new HashMap<>();
-    private Map<Course, Double> passedCourses = new HashMap<>();
+    private Map<Course, Double> termCourses = new HashMap<>();//todo: convert Set<Coures> -> coursesID
+    private Map<Course, Double> passedCourses = new HashMap<>();//todo: convert Set<Coures> -> coursesID
 
     public Student(String name, String userName, String birthday, String studentId, String password)
     {
