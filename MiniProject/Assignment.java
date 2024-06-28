@@ -6,7 +6,7 @@ public class Assignment implements Serializable
 {
     private String assignmentId;
     private String detail;
-    private final Course course;
+    private final Course course;//todo: convert Set<Coures> -> coursesID
     private String deadline;
     private boolean isActive;
 
