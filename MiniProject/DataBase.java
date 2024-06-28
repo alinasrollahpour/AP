@@ -20,6 +20,7 @@ public class DataBase
 			for(Student s: students)
 			{
 				if(s.equals(student))
+					//TODO: replace that!
 					return;
 			}
 
