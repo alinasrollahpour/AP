@@ -2,29 +2,26 @@
 Hirarchy:
 
 /DB/
-    /teachers/
-    /students/
-    /courses/
-    /assignments/
+    /teachers.txt
+    /students.txt
+    /courses.txt
+    /assignments.txt
 
 File structure:
 
 teachers/:
 
-    <teacher1_id>.txt : serialized object
-    <teacher2_id>.txt : serialized object
-    ...
+    serialized HashSet<>
 
 students/:
 
-    <student1_id>.txt : serialized object
-    ...
+    serialized HashSet<>
 
 courses/:
 
-    <course1_id>.txt : serialized object
-    ...
+    serialized HashSet<>
+
 assignments/:
 
-    <assignment1_id>.txt : serialized object
-    ...
+    serialized HashSet<>
+
