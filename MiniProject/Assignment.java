@@ -6,21 +6,21 @@ public class Assignment implements Serializable
 {
     private String assignmentId;
     private String detail;
-    private final Course course;
+    private final String courseId;
     private String deadline;
     private boolean isActive;
 
-    public Assignment(String assignmentId, String detail, Course course)
+    public Assignment(String assignmentId, String detail, String courseId)
     {
         this.assignmentId = assignmentId;
         this.detail = detail;
-        this.course = course;
+        this.courseId = courseId;
         this.isActive = false;
     }
 
-    public Assignment(String assignmentId, String detail, Course course, String deadline)
+    public Assignment(String assignmentId, String detail, String courseId, String deadline)
     {
-        this(assignmentId, detail, course);
+        this(assignmentId, detail, courseId);
         this.deadline = deadline;
         this.isActive = true;
     }
@@ -35,9 +35,9 @@ public class Assignment implements Serializable
         return detail;
     }
 
-    public Course getCourse()
+    public String getCourseId()
     {
-        return course;
+        return courseId;
     }
 
     public String getDeadline()

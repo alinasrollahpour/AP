@@ -1,8 +1,10 @@
 package MiniProject;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Student implements Serializable
 {
@@ -12,8 +14,8 @@ public class Student implements Serializable
     private int term;
     private final String studentId;
     private String password;
-    private Map<Course, Double> termCourses = new HashMap<>();
-    private Map<Course, Double> passedCourses = new HashMap<>();
+    private Map<String, Double> termCoursesId = new HashMap<>();
+    private Map<String, Double> passedCoursesId = new HashMap<>();
 
     public Student(String name, String userName, String birthday, String studentId, String password)
     {
@@ -51,24 +53,24 @@ public class Student implements Serializable
         return term;
     }
 
-    public Course[] getTermCourses()
+    public Map<String, Double> getTermCoursesId()
     {
-        return (Course[])termCourses.keySet().toArray();
+        return termCoursesId;
     }
 
-    public Course[] getPassedCourses()
+    public Map<String, Double> getPassedCoursesId()
     {
-        return (Course[])passedCourses.keySet().toArray();
+        return passedCoursesId;
     }
 
     public int getTermCoursesNumber()
     {
-        return termCourses.size();
+        return termCoursesId.size();
     }
 
     public int getPassedCoursesNumber()
     {
-        return passedCourses.size();
+        return passedCoursesId.size();
     }
 
     public String getStudentId()
@@ -83,25 +85,35 @@ public class Student implements Serializable
 
     public double getTermAverage()
     {
-        if(termCourses.isEmpty())
+        if(termCoursesId.isEmpty())
         {
             return -1;
         }
 
-        double sum = 0;
+        Set<Course> courses;
+
+		try
+		{
+			courses = DataBase.courseLoader();
+		}
+        catch(IOException | ClassNotFoundException e)
+		{
+			return -1;
+		}
+
+		double sum = 0;
         int num = 0;
 
-        for(Object obj: termCourses.keySet().toArray())
+        for(Object obj: courses.toArray())
         {
             Course c = (Course)obj;
             
-            if(termCourses.get(c) != null)
+            if(termCoursesId.containsKey(c.getCourseId()) && termCoursesId.get(c.getCourseId()) != null)
             {
-                sum += c.getUnit() * termCourses.get(c);
+                sum += c.getUnit() * termCoursesId.get(c.getCourseId());
                 num++;
             }
         }
-
         return sum / num;
     }
 
@@ -112,16 +124,27 @@ public class Student implements Serializable
             return -1;
         }
 
-        double sum = 0;
+        Set<Course> courses;
 
-        for(Object obj: passedCourses.keySet().toArray())
+        try
         {
-            Course c = (Course)obj;
-            
-            sum += c.getUnit() * passedCourses.get(c);
+            courses = DataBase.courseLoader();
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            return -1;
         }
 
-        return sum / passedCourses.size();
+        double sum = 0;
+
+        for(Object obj: courses.toArray())
+        {
+            Course c = (Course)obj;
+
+            if(passedCoursesId.containsKey(c.getCourseId()))
+                sum += c.getUnit() * passedCoursesId.get(c.getCourseId());
+        }
+        return sum / passedCoursesId.size();
     }
 
     public void setUserName(String userName)
@@ -146,53 +169,162 @@ public class Student implements Serializable
 
     public int getTermUnitNumber()
     {
-        return termCourses.keySet().stream().map(Course::getUnit).reduce(Integer::sum).orElse(0);
+        Set<Course> courses;
+
+		try
+		{
+			courses = DataBase.courseLoader();
+		}
+        catch(IOException | ClassNotFoundException e)
+		{
+			return 0;
+		}
+
+        int num = 0;
+
+        for(Object obj: courses.toArray())
+        {
+            Course c = (Course)obj;
+
+            if(termCoursesId.containsKey(c.getCourseId()))
+                num += c.getUnit();
+        }
+
+		return num;
     }
 
     public int getPassedUnitNumber()
     {
-        return passedCourses.keySet().stream().map(Course::getUnit).reduce(Integer::sum).orElse(0);
+        Set<Course> courses;
+
+        try
+        {
+            courses = DataBase.courseLoader();
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            return 0;
+        }
+
+        int num = 0;
+
+        for(Object obj: courses.toArray())
+        {
+            Course c = (Course)obj;
+
+            if(passedCoursesId.containsKey(c.getCourseId()))
+                num += c.getUnit();
+        }
+
+        return num;
     }
 
     public void printTermCourses()
     {
-        termCourses.keySet().stream().sorted((c1, c2) -> c1.getName().compareTo(c2.getName())).forEach(c -> System.out.println(c.getName()));
+        Set<Course> courses;
+
+        try
+        {
+            courses = DataBase.courseLoader();
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            return;
+        }
+
+        for(Object obj: courses.toArray())
+        {
+            Course c = (Course)obj;
+
+            if(termCoursesId.containsKey(c.getCourseId()))
+                System.out.println(c.getName());
+        }
     }
 
     public void printPassedCourses()
     {
-        passedCourses.keySet().stream().sorted((c1, c2) -> c1.getName().compareTo(c2.getName())).forEach(c -> System.out.println(c.getName()));
+        Set<Course> courses;
+
+        try
+        {
+            courses = DataBase.courseLoader();
+        }
+        catch(IOException | ClassNotFoundException e)
+        {
+            return;
+        }
+
+        for(Object obj: courses.toArray())
+        {
+            Course c = (Course)obj;
+
+            if(passedCoursesId.containsKey(c.getCourseId()))
+                System.out.println(c.getName());
+        }
     }
 
     public void addCourse(Course course)
     {
-        termCourses.put(course, null);
+        termCoursesId.put(course.getCourseId(), null);
+    }
+
+    public void addCourse(String courseId)
+    {
+        termCoursesId.put(courseId, null);
     }
 
     public void addPassedCourse(Course course, double score)
     {
-        passedCourses.put(course, score);
+        passedCoursesId.put(course.getCourseId(), score);
+    }
+
+    public void addPassedCourse(String courseId, double score)
+    {
+        passedCoursesId.put(courseId, score);
     }
 
     public void deleteTermCourse(Course course)
     {
-        termCourses.remove(course);
+        termCoursesId.remove(course.getCourseId());
+    }
+
+    public void deleteTermCourse(String courseId)
+    {
+        termCoursesId.remove(courseId);
     }
 
     public void deletePassedCourse(Course course)
     {
-        passedCourses.remove(course);
+        passedCoursesId.remove(course.getCourseId());
+    }
+
+    public void deletePassedCourse(String courseId)
+    {
+        passedCoursesId.remove(courseId);
     }
 
     public Double getScoreOfCourse(Course course)
     {
-        if(passedCourses.containsKey(course))
+        if(passedCoursesId.containsKey(course.getCourseId()))
         {
-            return passedCourses.get(course);
+            return passedCoursesId.get(course.getCourseId());
         }
-        else if(termCourses.containsKey(course))
+        else if(termCoursesId.containsKey(course.getCourseId()))
         {
-            return termCourses.get(course);
+            return termCoursesId.get(course.getCourseId());
+        }
+        return null;
+    }
+
+    public Double getScoreOfCourse(String courseId)
+    {
+        if(passedCoursesId.containsKey(courseId))
+        {
+            return passedCoursesId.get(courseId);
+        }
+        else if(termCoursesId.containsKey(courseId))
+        {
+            return termCoursesId.get(courseId);
         }
         return null;
     }
@@ -206,6 +338,6 @@ public class Student implements Serializable
         }
         Student student = (Student)obj;
 
-		return studentId.equals(student.getStudentId()) && name.equals(student.getName());
+		return studentId.equals(student.getStudentId());
     }
 }

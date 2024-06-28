@@ -7,11 +7,11 @@ import java.util.Set;
 public class Course implements Serializable
 {
     private final String name;
-    private Teacher teacher;
+    private String teacherId;
     private final String courseId;
     private final int unit;
-    private Set<Student> students = new HashSet<>();
-    private Set<Assignment> assignments = new HashSet<>();
+    private Set<String> studentsId = new HashSet<>();
+    private Set<String> assignmentsId = new HashSet<>();
     private String examDate;
     private boolean isActive;
 
@@ -23,10 +23,10 @@ public class Course implements Serializable
         isActive = false;
     }
 
-    public Course(String name, Teacher teacher, String courseId, int unit, String examDate)
+    public Course(String name, String teacherId, String courseId, int unit, String examDate)
     {
         this(name, courseId, unit);
-        this.teacher = teacher;
+        this.teacherId = teacherId;
         this.examDate = examDate;
         isActive = true;
     }
@@ -36,9 +36,9 @@ public class Course implements Serializable
         return name;
     }
 
-    public Teacher getTeacher()
+    public String getTeacherId()
     {
-        return teacher;
+        return teacherId;
     }
 
     public String getCourseId()
@@ -63,7 +63,7 @@ public class Course implements Serializable
 
     public int getStudentNumber()
     {
-        return students.size();
+        return studentsId.size();
     }
 
     public void setExamDate(String examDate)
@@ -71,12 +71,12 @@ public class Course implements Serializable
         this.examDate = examDate;
     }
 
-    public void activeCourse(Teacher teacher, String examDate)
+    public void activeCourse(String teacherId, String examDate)
     {
         if(!isActive)
         {
             isActive = true;
-            this.teacher = teacher;
+            this.teacherId = teacherId;
             this.examDate = examDate;
         }
     }
@@ -86,40 +86,51 @@ public class Course implements Serializable
         if(isActive)
         {
             isActive = false;
-            teacher = null;
+            teacherId = null;
             examDate = null;
         }
     }
 
-    public void printStudents()
-    {
-        students.forEach(s -> System.out.println(s.getName()));
-    }
-
     public void addStudent(Student student)
     {
-        students.add(student);
+        studentsId.add(student.getStudentId());
+    }
+
+    public void addStudent(String studentId)
+    {
+        studentsId.add(studentId);
     }
 
     public void deleteStudent(Student student)
     {
-        students.remove(student);
+        studentsId.remove(student.getStudentId());
+    }
+
+    public void deleteStudent(String studentId)
+    {
+        studentsId.remove(studentId);
     }
 
     public void addAssignment(Assignment assignment)
     {
-        assignments.add(assignment);
+        assignmentsId.add(assignment.getAssignmentId());
+    }
+
+    public void addAssignment(String assignmentId)
+    {
+        assignmentsId.add(assignmentId);
     }
 
     public void deleteAssignment(Assignment assignment)
     {
-        assignments.remove(assignment);
+        assignmentsId.remove(assignment.getAssignmentId());
     }
 
-    public Double getMaxScore()
+    public void deleteAssignment(String assignmentId)
     {
-        return students.stream().map(s -> s.getScoreOfCourse(this)).max(Double::compareTo).orElse(0.0);
+        assignmentsId.remove(assignmentId);
     }
+
 
     @Override
     public boolean equals(Object obj)

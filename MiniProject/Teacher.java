@@ -8,13 +8,13 @@ public class Teacher implements Serializable
 {
     private final String name;
     private final String teacherId;
-    private Set<Course> courses = new HashSet<>();
+    private Set<String> coursesId = new HashSet<>();
 
-    public Teacher(String name, String teacherId, Set<Course> courses)
+    public Teacher(String name, String teacherId, Set<String> coursesId)
     {
         this.name = name;
         this.teacherId = teacherId;
-        this.courses = courses;
+        this.coursesId = coursesId;
     }
 
     public String getName()
@@ -29,22 +29,32 @@ public class Teacher implements Serializable
 
     public int getCoursesNumber()
     {
-        return courses.size();
+        return coursesId.size();
     }
 
-    public Set<Course> getCourses()
+    public Set<String> getCoursesId()
     {
-        return courses;
+        return coursesId;
     }
 
     public void addCourse(Course course)
     {
-        courses.add(course);
+        coursesId.add(course.getCourseId());
+    }
+
+    public void addCourse(String courseId)
+    {
+        coursesId.add(courseId);
     }
 
     public void removeCourse(Course course)
     {
-        courses.remove(course);
+        coursesId.remove(course.getCourseId());
+    }
+
+    public void removeCourse(String courseId)
+    {
+        coursesId.remove(courseId);
     }
 
 
@@ -57,6 +67,6 @@ public class Teacher implements Serializable
         }
         Teacher teacher = (Teacher)obj;
 
-		return teacherId.equals(teacher.getTeacherId()) && name.equals(teacher.getName());
+		return teacherId.equals(teacher.getTeacherId());
     }
 }
