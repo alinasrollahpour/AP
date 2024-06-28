@@ -340,4 +340,12 @@ public class Student implements Serializable
 
 		return studentId.equals(student.getStudentId());
     }
+
+    @Override
+    public String toString()
+    {
+        return "Student{" + "name='" + name + '\'' + ", userName='" + userName + '\'' + ", birthday='" + birthday + '\''
+                + ", term=" + term + ", studentId='" + studentId + '\'' + ", password='" + password + '\''
+                + ", termCoursesId=" + termCoursesId + ", passedCoursesId=" + passedCoursesId + '}';
+    }
 }

@@ -143,4 +143,12 @@ public class Course implements Serializable
 
 		return courseId.equals(course.getCourseId());
     }
+
+    @Override
+    public String toString()
+    {
+        return "Course{" + "examDate='" + examDate + '\'' + ", assignmentsId=" + assignmentsId + ", studentsId="
+                + studentsId + ", unit=" + unit + ", courseId='" + courseId + '\'' + ", teacherId='" + teacherId + '\''
+                + ", name='" + name + '\'' + '}';
+    }
 }

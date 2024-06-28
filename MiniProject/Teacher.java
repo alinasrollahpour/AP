@@ -69,4 +69,11 @@ public class Teacher implements Serializable
 
 		return teacherId.equals(teacher.getTeacherId());
     }
+
+    @Override
+    public String toStringString()
+    {
+        return "Teacher{" + "name='" + name + '\'' + ", teacherId='" + teacherId + '\'' + ", coursesId=" + coursesId
+                + '}';
+    }
 }
