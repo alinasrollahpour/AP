@@ -7,11 +7,11 @@ import java.util.Set;
 public class Course implements Serializable
 {
     private final String name;
-    private Teacher teacher;
+    private Teacher teacher;//todo: convert Set<Coures> -> coursesID
     private final String courseId;
     private final int unit;
-    private Set<Student> students = new HashSet<>();
-    private Set<Assignment> assignments = new HashSet<>();
+    private Set<Student> students = new HashSet<>();//todo: convert Set<Coures> -> coursesID
+    private Set<Assignment> assignments = new HashSet<>();//todo: convert Set<Coures> -> coursesID
     private String examDate;
     private boolean isActive;
 
