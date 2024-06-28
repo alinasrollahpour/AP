@@ -1,0 +1,80 @@
+{
+    "#" : "sign up;",
+    "query" : 
+    {
+        "type" : "SIGNUP",
+        "student_id" : "",
+        "username" : "",
+        "password" : "",
+        "name" : ""
+    },
+    "answer1" :
+    {
+        "type" : "EXCEPTION",
+        "message" : "student_id duplicated" or "username duplicated"
+    },
+    "answer2" : 
+    {
+        "type" : "SIGNED_UP",
+        "student_id" : ""
+    },
+
+
+
+
+    "#" : "sign in;",
+    "query" : 
+    {
+        "type" : "SIGNIN",
+        "student_id" : "",
+        "password" : ""
+    },
+    "answer1" :
+    {
+        "type" : "EXCEPTION",
+        "message" : "student_id not exists", or "wrong password",
+
+    },
+    "answer2" : 
+    {
+        "type" : "SIGNED_IN",
+        "student_id" : ""
+    },
+
+
+
+
+    "#" : "deleting account",
+    "query" : 
+    {
+        "type" : "DELETE"
+    },
+    "answer1" : 
+    {
+        "type" : "EXCEPTION"
+    },
+    "answer2" : 
+    {
+        "type" : "DELETED"
+    },
+
+
+
+    "#" : "getting",
+    "query" : 
+    {
+        "type" : "GET",
+        "content" : "student" or "assignment" or "courses" or "teachers",
+    },
+    "answer1" : 
+    {
+        "type" : "EXCEPTION",
+    },
+    "answer2" : 
+    {
+        "type" : "DATA",
+        "data" : {}
+    }
+
+
+}
