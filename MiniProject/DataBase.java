@@ -13,7 +13,7 @@ public class DataBase
 		{
 			students = studentLoader();
 		}
-		catch(EOFException _)
+		catch(EOFException ignored)
 		{}
 		finally
 		{
@@ -43,7 +43,7 @@ public class DataBase
 		{
 			courses = courseLoader();
 		}
-		catch(EOFException _)
+		catch(EOFException ignored)
 		{}
 		finally
 		{
@@ -71,7 +71,7 @@ public class DataBase
 		{
 			teachers = teacherLoader();
 		}
-		catch(EOFException _)
+		catch(EOFException ignored)
 		{}
 		finally
 		{
@@ -99,7 +99,7 @@ public class DataBase
 		{
 			assignments = assignmentLoader();
 		}
-		catch(EOFException _)
+		catch(EOFException ignored)
 		{}
 		finally
 		{
