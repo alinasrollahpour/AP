@@ -9,19 +9,19 @@ Hirarchy:
 
 File structure:
 
-teachers.txt:
+teachers/:
 
-    teacher_id~teacher_name~course1_id/course2_id/course3_id~...
+    serialized HashSet<>
 
-students.txt:
+students/:
 
-    student_id~username~password~student_name~term~birth_date~term_course1/term_course2~passed_course1/passed_course2
+    serialized HashSet<>
 
-courses.txt:
+courses/:
 
-    course_id~course_name~teacher_id~unit~exam_date~isActive~assignment1_id/assignment2_id~studnt1_id/studnt2_id
+    serialized HashSet<>
 
-assignments.txt
+assignments/:
 
-    assignment_id~course_id~detail~deadline~isActive
+    serialized HashSet<>
 
