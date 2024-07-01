@@ -71,7 +71,7 @@ public class Teacher implements Serializable
     }
 
     @Override
-    public String toStringString()
+    public String toString()
     {
         return "Teacher{" + "name='" + name + '\'' + ", teacherId='" + teacherId + '\'' + ", coursesId=" + coursesId
                 + '}';
