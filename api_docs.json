@@ -11,7 +11,7 @@
     "answer1" :
     {
         "type" : "EXCEPTION",
-        "message" : "student_id duplicated" or "username duplicated"
+        "message" : "student_id duplicated/username duplicated"
     },
     "answer2" : 
     {
@@ -64,16 +64,28 @@
     "query" : 
     {
         "type" : "GET",
-        "content" : "student" or "assignment" or "courses" or "teachers",
+        "content" : "student" or "assignments" or "courses" or "teachers"
     },
     "answer1" : 
     {
         "type" : "EXCEPTION",
+        "message" : ""
     },
     "answer2" : 
     {
         "type" : "DATA",
         "data" : {}
+    },
+
+    "#" : "setting",
+    "query" :
+    {
+        "type" : "SET",
+        "username" : "",
+        "password" : "",
+        "name" : "",
+        "birthdate" : ""
+
     }
 
 
