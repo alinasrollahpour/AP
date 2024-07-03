@@ -3,7 +3,10 @@ package MiniProject;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.HashSet;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Cli
 {
@@ -58,14 +61,54 @@ public class Cli
 				System.out.println("\t8. Deleting student from course");
 				System.out.println("\t9. Set deadline of an assignment");
 				System.out.println("\t10. Deactivate an assignment");
+				System.out.println("\t11. Adding a passed course for a student");
+				System.out.println("\t12. Deleting a passed course for a student");
+				System.out.println("\t13. Enter a score for a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
-				//add to passed course
 
-				System.out.print("Please enter a number between 0 and : ");
+				System.out.print("Please enter a number between 0 and : ");			//TODO
 
 				switch(input.nextLine())
 				{
 				case "1":
+
+					System.out.print("Name: ");
+					String name = input.nextLine();
+
+					System.out.print("ID: ");
+					String id = input.nextLine();
+
+					System.out.print("Number of teacher's courses: ");
+
+					int n;
+					try
+					{
+						n = input.nextInt();
+						input.nextLine();
+					}
+					catch(InputMismatchException e)
+					{
+						System.out.println(ANSI_RED + "Adding teacher isn't successful.\n" + ANSI_RESET);
+						input.nextLine();
+						break;
+					}
+
+					Set<String> coursesId = new HashSet<>();
+					for(int i = 0; i < n; i++)
+					{
+						System.out.print("Course's ID " + (i + 1) + " : ");
+						coursesId.add(input.nextLine());
+					}
+
+					try
+					{
+						DataBase.addTeacher(new Teacher(name, id, coursesId));
+						System.out.println(ANSI_GREEN + "Adding teacher is successful.\n" + ANSI_RESET);
+					}
+					catch(IOException | ClassNotFoundException e)
+					{
+						System.out.println(ANSI_RED + "Adding teacher isn't successful.\n" + ANSI_RESET);
+					}
 
 					break;
 
@@ -104,6 +147,36 @@ public class Cli
 					break;
 
 				case "8":
+
+
+
+					break;
+
+				case "9":
+
+
+
+					break;
+
+				case "10":
+
+
+
+					break;
+
+				case "11":
+
+
+
+					break;
+
+				case "12":
+
+
+
+					break;
+
+				case "13":
 
 
 
