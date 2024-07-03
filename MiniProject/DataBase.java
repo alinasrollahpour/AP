@@ -17,13 +17,7 @@ public class DataBase
 		{}
 		finally
 		{
-			for(Student s: students)
-			{
-				if(s.equals(student))
-					//TODO: replace that!
-					return;
-			}
-
+			students.removeIf(s -> s.equals(student));
 			students.add(student);
 		}
 
@@ -47,12 +41,7 @@ public class DataBase
 		{}
 		finally
 		{
-			for(Course c: courses)
-			{
-				if(c.equals(course))
-					return;
-			}
-
+			courses.removeIf(c -> c.equals(course));
 			courses.add(course);
 		}
 		FileOutputStream fos = new FileOutputStream("Files/courses.txt");
@@ -75,12 +64,7 @@ public class DataBase
 		{}
 		finally
 		{
-			for(Teacher t: teachers)
-			{
-				if(t.equals(teacher))
-					return;
-			}
-
+			teachers.removeIf(t -> t.equals(teacher));
 			teachers.add(teacher);
 		}
 		FileOutputStream fos = new FileOutputStream("Files/teachers.txt");
@@ -103,12 +87,7 @@ public class DataBase
 		{}
 		finally
 		{
-			for(Assignment a: assignments)
-			{
-				if(a.equals(assignment))
-					return;
-			}
-
+			assignments.removeIf(a -> a.equals(assignment));
 			assignments.add(assignment);
 		}
 		FileOutputStream fos = new FileOutputStream("Files/assignments.txt");

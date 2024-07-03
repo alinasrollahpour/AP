@@ -81,13 +81,24 @@ public class Assignment implements Serializable
         return assignmentId.equals(that.assignmentId);
     }
 
+//    @Override
+//    public String toString()
+//    {
+//        if(isActive)
+//            return "Assignment ID: " + assignmentId + "Detail: " + detail + "Course ID: " + courseId + "Deadline: " + deadline;
+//
+//        else
+//            return "Assignment ID: " + assignmentId + "Detail: " + detail + "Course ID: " + courseId;
+//    }
+
     @Override
     public String toString()
     {
         if(isActive)
-            return "Assignment ID: " + assignmentId + "\nDetail: " + detail + "\nCourse ID: " + courseId + "\nDeadline: " + deadline;
-
+            return "Assignment{" + "assignmentId='" + assignmentId + '\'' + ", detail='" + detail + '\'' + ", courseId='"
+                    + courseId + '\'' + ", deadline='" + deadline + '\'' + '}';
         else
-            return "Assignment ID: " + assignmentId + "\nDetail: " + detail + "\nCourse ID: " + courseId;
+            return "Assignment{" + "assignmentId='" + assignmentId + '\'' + ", detail='" + detail + '\'' + ", courseId='"
+                    + courseId + '\'' + '}';
     }
 }
