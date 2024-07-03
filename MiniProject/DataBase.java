@@ -99,6 +99,96 @@ public class DataBase
 		fos.close();
 	}
 
+	public static void removeStudent(Student student) throws IOException, ClassNotFoundException
+	{
+		Set<Student> students = new HashSet<>();
+		try
+		{
+			students = studentLoader();
+		}
+		catch(EOFException ignored)
+		{}
+		finally
+		{
+			students.removeIf(s -> s.equals(student));
+		}
+
+		FileOutputStream fos = new FileOutputStream("Files/students.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+		oos.writeObject(students);
+
+		oos.close();
+		fos.close();
+	}
+
+	public static void removeCourse(Course course) throws IOException, ClassNotFoundException
+	{
+		Set<Course> courses = new HashSet<>();
+		try
+		{
+			courses = courseLoader();
+		}
+		catch(EOFException ignored)
+		{}
+		finally
+		{
+			courses.removeIf(c -> c.equals(course));
+		}
+		FileOutputStream fos = new FileOutputStream("Files/courses.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+		oos.writeObject(courses);
+
+		oos.close();
+		fos.close();
+	}
+
+	public static void removeTeacher(Teacher teacher) throws IOException, ClassNotFoundException
+	{
+		Set<Teacher> teachers = new HashSet<>();
+		try
+		{
+			teachers = teacherLoader();
+		}
+		catch(EOFException ignored)
+		{}
+		finally
+		{
+			teachers.removeIf(t -> t.equals(teacher));
+		}
+		FileOutputStream fos = new FileOutputStream("Files/teachers.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+		oos.writeObject(teachers);
+
+		oos.close();
+		fos.close();
+	}
+
+	public static void removeAssignment(Assignment assignment) throws IOException, ClassNotFoundException
+	{
+		Set<Assignment> assignments = new HashSet<>();
+		try
+		{
+			assignments = assignmentLoader();
+		}
+		catch(EOFException ignored)
+		{}
+		finally
+		{
+			assignments.removeIf(a -> a.equals(assignment));
+		}
+		FileOutputStream fos = new FileOutputStream("Files/assignments.txt");
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+		oos.writeObject(assignments);
+
+		oos.close();
+		fos.close();
+	}
+
+
 	public static Set<Student> studentLoader() throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream("Files/students.txt");
