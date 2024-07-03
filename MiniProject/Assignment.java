@@ -81,16 +81,6 @@ public class Assignment implements Serializable
         return assignmentId.equals(that.assignmentId);
     }
 
-//    @Override
-//    public String toString()
-//    {
-//        if(isActive)
-//            return "Assignment ID: " + assignmentId + "Detail: " + detail + "Course ID: " + courseId + "Deadline: " + deadline;
-//
-//        else
-//            return "Assignment ID: " + assignmentId + "Detail: " + detail + "Course ID: " + courseId;
-//    }
-
     @Override
     public String toString()
     {
