@@ -58,8 +58,9 @@ public class Cli
 				System.out.println("\t4. Adding/editing course");
 				System.out.println("\t5. Print list of courses");
 				System.out.println("\t6. Deleting course");
-				System.out.println("\t. Adding/editing assignment");
-				System.out.println("\t. Deleting assignment");
+				System.out.println("\t7. Adding/editing assignment");
+				System.out.println("\t8. Print list of assignments");
+				System.out.println("\t9. Deleting assignment");
 				System.out.println("\t. Adding student to course");
 				System.out.println("\t. Deleting student from course");
 				System.out.println("\t. Set deadline of an assignment");
@@ -180,7 +181,7 @@ public class Cli
 					}
 					case "4":
 					{
-						System.out.print("course ID: ");
+						System.out.print("Course ID: ");
 						String courseId = input.nextLine();
 
 						try
@@ -292,19 +293,109 @@ public class Cli
 					}
 					case "7":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
 
+						try
+						{
+							if(DataBase.assignmentLoader().stream().map(Assignment::getAssignmentId).anyMatch(x -> x.equals(assignmentId)))
+							{
+								System.out.println(ANSI_BLUE + "Assignment with this ID is exist." + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_BLUE + "Assignment with this ID isn't exist." + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding/editing assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Detail: ");
+						String detail = input.nextLine();
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						System.out.print(ANSI_BLUE + "Is the assignment active?(y/n) " + ANSI_RESET);
+
+						while(true)
+						{
+							try
+							{
+								String answer = input.nextLine();
+								if(answer.equals("y"))
+								{
+									System.out.print("Deadline: ");
+									String deadline = input.nextLine();
+
+									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId, deadline));
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+								else if(answer.equals("n"))
+								{
+									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId));
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+
+								System.out.print(ANSI_BLUE + "Is the assignment active?(y/n) " + ANSI_RESET);
+							}
+							catch(IOException | ClassNotFoundException e)
+							{
+								System.out.println(ANSI_RED + "\nError: Adding/editing assignment isn't successful.\n" + ANSI_RESET);
+							}
+						}
 
 						break;
 					}
 					case "8":
 					{
-
+						try
+						{
+							System.out.println();
+							DataBase.assignmentLoader().forEach(System.out::println);
+							System.out.println();
+						}
+						catch(EOFException	e)
+						{
+							System.out.println("\n");
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "Error: Printing list of assignments failed.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
 					case "9":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
 
+						try
+						{
+							if(DataBase.assignmentLoader().stream().map(Assignment::getAssignmentId).anyMatch(x -> x.equals(assignmentId)))
+							{
+								DataBase.removeAssignment((Assignment) DataBase.assignmentLoader().stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0]);
+								System.out.println(ANSI_GREEN + "\nDeleting assignment is successful.\n" + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting assignment isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
