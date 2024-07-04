@@ -192,52 +192,84 @@ public class DataBase
 	public static Set<Student> studentLoader() throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream("Files/students.txt");
-		ObjectInputStream ois = new ObjectInputStream(fis);
 
-		Set<Student> students = (Set<Student>)ois.readObject();
+		try
+		{
+			ObjectInputStream ois = new ObjectInputStream(fis);
 
-		ois.close();
-		fis.close();
+			Set<Student> students = (Set<Student>)ois.readObject();
 
-		return students;
+			ois.close();
+			fis.close();
+
+			return students;
+		}
+		catch(EOFException e)
+		{
+			return new HashSet<>();
+		}
 	}
 
 	public static Set<Course> courseLoader() throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream("Files/courses.txt");
-		ObjectInputStream ois = new ObjectInputStream(fis);
 
-		Set<Course> courses = (Set<Course>)ois.readObject();
+		try
+		{
+			ObjectInputStream ois = new ObjectInputStream(fis);
 
-		ois.close();
-		fis.close();
+			Set<Course> courses = (Set<Course>)ois.readObject();
 
-		return courses;
+			ois.close();
+			fis.close();
+
+			return courses;
+		}
+		catch(EOFException e)
+		{
+			return new HashSet<>();
+		}
 	}
 
 	public static Set<Teacher> teacherLoader() throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream("Files/teachers.txt");
-		ObjectInputStream ois = new ObjectInputStream(fis);
 
-		Set<Teacher> teachers = (Set<Teacher>)ois.readObject();
+		try
+		{
+			ObjectInputStream ois = new ObjectInputStream(fis);
 
-		ois.close();
-		fis.close();
+			Set<Teacher> teachers = (Set<Teacher>)ois.readObject();
 
-		return teachers;
+			ois.close();
+			fis.close();
+
+			return teachers;
+		}
+		catch(EOFException e)
+		{
+			return new HashSet<>();
+		}
 	}
 
 	public static Set<Assignment> assignmentLoader() throws IOException, ClassNotFoundException
 	{
 		FileInputStream fis = new FileInputStream("Files/assignments.txt");
-		ObjectInputStream ois = new ObjectInputStream(fis);
 
-		Set<Assignment> assignments = (Set<Assignment>)ois.readObject();
+		try
+		{
+			ObjectInputStream ois = new ObjectInputStream(fis);
 
-		ois.close();
-		fis.close();
+			Set<Assignment> assignments = (Set<Assignment>)ois.readObject();
 
-		return assignments;
+			ois.close();
+			fis.close();
+
+			return assignments;
+		}
+		catch(EOFException e)
+		{
+			return new HashSet<>();
+		}
 	}
 }
