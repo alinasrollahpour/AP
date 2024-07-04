@@ -51,6 +51,16 @@ public class Course implements Serializable
         return unit;
     }
 
+    public Set<String> getStudentsId()
+    {
+        return studentsId;
+    }
+
+    public Set<String> getAssignmentsId()
+    {
+        return assignmentsId;
+    }
+
     public boolean isActive()
     {
         return isActive;
