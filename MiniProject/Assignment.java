@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Assignment implements Serializable
 {
-    private String assignmentId;
+    private final String assignmentId;
     private String detail;
     private final String courseId;
     private String deadline;
