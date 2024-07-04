@@ -1,5 +1,6 @@
 package MiniProject;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -51,146 +52,295 @@ public class Cli
 			while(flag)
 			{
 				System.out.println(ANSI_BLUE + "Menu:");
-				System.out.println("\t1. Adding teacher");
-				System.out.println("\t2. Deleting teacher");
-				System.out.println("\t3. Adding course");
-				System.out.println("\t4. Deleting course");
-				System.out.println("\t5. Adding assignment");
-				System.out.println("\t6. Deleting assignment");
-				System.out.println("\t7. Adding student to course");
-				System.out.println("\t8. Deleting student from course");
-				System.out.println("\t9. Set deadline of an assignment");
-				System.out.println("\t10. Deactivate an assignment");
-				System.out.println("\t11. Adding a passed course for a student");
-				System.out.println("\t12. Deleting a passed course for a student");
-				System.out.println("\t13. Enter a score for a student's course");
+				System.out.println("\t1. Adding/editing teacher");
+				System.out.println("\t2. Print list of teachers");
+				System.out.println("\t3. Deleting teacher");
+				System.out.println("\t4. Adding/editing course");
+				System.out.println("\t5. Print list of courses");
+				System.out.println("\t6. Deleting course");
+				System.out.println("\t. Adding/editing assignment");
+				System.out.println("\t. Deleting assignment");
+				System.out.println("\t. Adding student to course");
+				System.out.println("\t. Deleting student from course");
+				System.out.println("\t. Set deadline of an assignment");
+				System.out.println("\t. Deactivate an assignment");
+				System.out.println("\t. Adding a passed course for a student");
+				System.out.println("\t. Deleting a passed course for a student");
+				System.out.println("\t. Enter a score for a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
 
 				System.out.print("Please enter a number between 0 and : ");			//TODO
 
 				switch(input.nextLine())
 				{
-				case "1":
-
-					System.out.print("Name: ");
-					String name = input.nextLine();
-
-					System.out.print("ID: ");
-					String id = input.nextLine();
-
-					System.out.print("Number of teacher's courses: ");
-
-					int n;
-					try
+					case "1":
 					{
-						n = input.nextInt();
-						input.nextLine();
-					}
-					catch(InputMismatchException e)
-					{
-						System.out.println(ANSI_RED + "Adding teacher isn't successful.\n" + ANSI_RESET);
-						input.nextLine();
+						System.out.print("ID: ");
+						String id = input.nextLine();
+
+						try
+						{
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(id)))
+							{
+								System.out.println(ANSI_BLUE + "Teacher with this ID is exist." + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_BLUE + "Teacher with this ID isn't exist." + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(
+									ANSI_RED + "\nError: Adding/editing teacher isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Name: ");
+						String name = input.nextLine();
+
+						System.out.print("Number of teacher's courses: ");
+
+						int n;
+						try
+						{
+							n = input.nextInt();
+							input.nextLine();
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println(
+									ANSI_RED + "\nError: Adding/editing teacher isn't successful.\n" + ANSI_RESET);
+							input.nextLine();
+							break;
+						}
+
+						Set<String> coursesId = new HashSet<>();
+						for(int i = 0; i < n; i++)
+						{
+							System.out.print("Course's ID " + (i + 1) + " : ");
+							coursesId.add(input.nextLine());
+						}
+
+						try
+						{
+							DataBase.addTeacher(new Teacher(name, id, coursesId));
+							System.out.println(ANSI_GREEN + "\nAdding/editing teacher is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(
+									ANSI_RED + "\nError: Adding/editing teacher isn't successful.\n" + ANSI_RESET);
+						}
+
 						break;
 					}
-
-					Set<String> coursesId = new HashSet<>();
-					for(int i = 0; i < n; i++)
+					case "2":
 					{
-						System.out.print("Course's ID " + (i + 1) + " : ");
-						coursesId.add(input.nextLine());
-					}
+						try
+						{
+							System.out.println();
+							DataBase.teacherLoader().forEach(System.out::println);
+							System.out.println();
+						}
+						catch(EOFException	e)
+						{
+							System.out.println("\n");
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "Error: Printing list of teachers failed.\n" + ANSI_RESET);
+						}
 
-					try
+						break;
+					}
+					case "3":
 					{
-						DataBase.addTeacher(new Teacher(name, id, coursesId));
-						System.out.println(ANSI_GREEN + "Adding teacher is successful.\n" + ANSI_RESET);
+						System.out.print("ID: ");
+						String id = input.nextLine();
+
+						try
+						{
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(id)))
+							{
+								DataBase.removeTeacher((Teacher) DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(id)).toArray()[0]);
+								System.out.println(ANSI_GREEN + "\nDeleting teacher is successful.\n" + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nTeacher with this ID isn't exist.\n" + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting teacher isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
 					}
-					catch(IOException | ClassNotFoundException e)
+					case "4":
 					{
-						System.out.println(ANSI_RED + "Adding teacher isn't successful.\n" + ANSI_RESET);
+						System.out.print("course ID: ");
+						String courseId = input.nextLine();
+
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								System.out.println(ANSI_BLUE + "Course with this ID is exist." + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_BLUE + "Course with this ID isn't exist." + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding/editing course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Name: ");
+						String name = input.nextLine();
+
+						System.out.print("Unit: ");
+						int unit = input.nextInt();
+						input.nextLine();
+
+						System.out.print(ANSI_BLUE + "Is the course active?(y/n) " + ANSI_RESET);
+
+						while(true)
+						{
+							try
+							{
+								String answer = input.nextLine();
+								if(answer.equals("y"))
+								{
+									System.out.print("Teacher ID: ");
+									String teacherId = input.nextLine();
+
+									System.out.print("Exam date: ");
+									String examDate = input.nextLine();
+
+									DataBase.addCourse(new Course(name, teacherId, courseId, unit, examDate));
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing course is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+								else if(answer.equals("n"))
+								{
+									DataBase.addCourse(new Course(name, courseId, unit));
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing course is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+
+								System.out.print(ANSI_BLUE + "Is the course active?(y/n) " + ANSI_RESET);
+							}
+							catch(IOException | ClassNotFoundException e)
+							{
+								System.out.println(ANSI_RED + "\nError: Adding/editing course isn't successful.\n" + ANSI_RESET);
+							}
+						}
+
+						break;
 					}
+					case "5":
+					{
+						try
+						{
+							System.out.println();
+							DataBase.courseLoader().forEach(System.out::println);
+							System.out.println();
+						}
+						catch(EOFException	e)
+						{
+							System.out.println("\n");
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "Error: Printing list of courses failed.\n" + ANSI_RESET);
+						}
 
-					break;
+						break;
+					}
+					case "6":
+					{
+						System.out.print("Course ID: ");
+						String id = input.nextLine();
 
-				case "2":
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(id)))
+							{
+								DataBase.removeCourse((Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(id)).toArray()[0]);
+								System.out.println(ANSI_GREEN + "\nDeleting course is successful.\n" + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting course isn't successful.\n" + ANSI_RESET);
+						}
 
-
-					break;
-
-				case "3":
-
-
-					break;
-
-				case "4":
-
-
-
-				break;
-
-				case "5":
-
-
-
-					break;
-
-				case "6":
-
-
-
-					break;
-
-				case "7":
-
-
-
-					break;
-
-				case "8":
-
-
-
-					break;
-
-				case "9":
-
-
-
-					break;
-
-				case "10":
+						break;
+					}
+					case "7":
+					{
 
 
-
-					break;
-
-				case "11":
-
-
-
-					break;
-
-				case "12":
+						break;
+					}
+					case "8":
+					{
 
 
+						break;
+					}
+					case "9":
+					{
 
-					break;
 
-				case "13":
+						break;
+					}
+					case "10":
+					{
 
 
+						break;
+					}
+					case "11":
+					{
 
-					break;
 
-				case "0":
+						break;
+					}
+					case "12":
+					{
 
-					flag = false;
 
-					break;
+						break;
+					}
+					case "13":
+					{
 
-				default:
 
-					System.out.println(ANSI_RED + "Error: Your number must be between 0 and ." + ANSI_RESET);
+						break;
+					}
+					case "0":
+					{
+						flag = false;
+
+						break;
+					}
+					default:
+
+						System.out.println(ANSI_RED + "Error: Your number must be between 0 and ." + ANSI_RESET);			//TODO
 				}
 			}
 		}
