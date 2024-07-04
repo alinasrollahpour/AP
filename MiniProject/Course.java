@@ -147,8 +147,8 @@ public class Course implements Serializable
     @Override
     public String toString()
     {
-        return "Course{" + "examDate='" + examDate + '\'' + ", assignmentsId=" + assignmentsId + ", studentsId="
-                + studentsId + ", unit=" + unit + ", courseId='" + courseId + '\'' + ", teacherId='" + teacherId + '\''
-                + ", name='" + name + '\'' + '}';
+        return "Course{" + "name='" + name + '\'' + ", teacherId='" + teacherId + '\'' + ", courseId='" + courseId
+                + '\'' + ", unit=" + unit + ", studentsId=" + studentsId + ", assignmentsId=" + assignmentsId
+                + ", examDate='" + examDate + '\'' + ", isActive=" + isActive + '}';
     }
 }
