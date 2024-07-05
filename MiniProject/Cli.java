@@ -68,8 +68,8 @@ public class Cli
 				System.out.println("\t14. Print list of students");
 				System.out.println("\t15. Active a course");
 				System.out.println("\t16. Inactive a course");
-				System.out.println("\t. Set deadline of an assignment");
-				System.out.println("\t. Deactivate an assignment");
+				System.out.println("\t17. Set deadline of an assignment");
+				System.out.println("\t. Inactive an assignment");
 				System.out.println("\t. Enter a score for a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
 
@@ -874,7 +874,32 @@ public class Cli
 					}
 					case "17":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
 
+						try
+						{
+							if(DataBase.assignmentLoader().stream().map(Assignment::getAssignmentId).anyMatch(x -> x.equals(assignmentId)))
+							{
+								Assignment assignment = (Assignment)DataBase.assignmentLoader().stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+
+								System.out.print("Deadline: ");
+								String deadline = input.nextLine();
+
+								assignment.setDeadline(deadline);
+								DataBase.addAssignment(assignment);
+
+								System.out.println(ANSI_GREEN + "\nSet deadline of the assignment is successful.\n" + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Set deadline of the assignment isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
