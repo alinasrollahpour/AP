@@ -63,7 +63,7 @@ public class Cli
 				System.out.println("\t9. Deleting assignment");
 				System.out.println("\t10. Adding student to course");
 				System.out.println("\t11. Deleting student from course");
-				System.out.println("\t. Adding a passed course for a student");
+				System.out.println("\t12. Adding a passed course for a student");
 				System.out.println("\t. Deleting a passed course for a student");
 				System.out.println("\t. Active a course");
 				System.out.println("\t. Set deadline of an assignment");
@@ -111,8 +111,7 @@ public class Cli
 						}
 						catch(InputMismatchException e)
 						{
-							System.out.println(
-									ANSI_RED + "\nError: Adding/editing teacher isn't successful.\n" + ANSI_RESET);
+							System.out.println(ANSI_RED + "\nError: Adding/editing teacher isn't successful.\n" + ANSI_RESET);
 							input.nextLine();
 							break;
 						}
@@ -548,7 +547,91 @@ public class Cli
 					}
 					case "12":
 					{
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+						Student student;
 
+						try
+						{
+							if(DataBase.studentLoader().stream().map(Student::getStudentId).anyMatch(x -> x.equals(studentId)))
+							{
+								student = (Student) DataBase.studentLoader().stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding a passed course for a student isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+						Course course;
+
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								course = (Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding a passed course for a student isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(!course.isActive())
+						{
+							System.out.println(ANSI_RED + "\nCourse with this ID isn't active.\n" + ANSI_RESET);
+							break;
+						}
+						else if(student.getPassedCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID passed this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Score: ");
+						double score;
+						try
+						{
+							score = input.nextDouble();
+							input.nextLine();
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding a passed course for a student isn't successful.\n" + ANSI_RESET);
+							input.nextLine();
+							break;
+						}
+
+						student.addPassedCourse(course, score);
+
+						try
+						{
+							if(course.getStudentsId().removeIf(x -> x.equals(studentId)))
+							{
+								student.deleteTermCourse(course);
+								DataBase.addCourse(course);
+							}
+							DataBase.addStudent(student);
+							System.out.println(ANSI_GREEN + "\nAdding a passed course for a student is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding a passed course for a student isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
