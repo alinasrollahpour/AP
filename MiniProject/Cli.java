@@ -67,7 +67,7 @@ public class Cli
 				System.out.println("\t13. Deleting a passed course for a student");
 				System.out.println("\t14. Print list of students");
 				System.out.println("\t15. Active a course");
-				System.out.println("\t. Inactive a course");
+				System.out.println("\t16. Inactive a course");
 				System.out.println("\t. Set deadline of an assignment");
 				System.out.println("\t. Deactivate an assignment");
 				System.out.println("\t. Enter a score for a student's course");
@@ -820,7 +820,55 @@ public class Cli
 					}
 					case "16":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+						Course course;
 
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								course = (Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(course.getTeacherId())).toArray()[0];
+
+								if(teacher != null)
+								{
+									teacher.removeCourse(courseId);
+									DataBase.addTeacher(teacher);
+								}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						course.inactiveCourse();
+
+						try
+						{
+							DataBase.addCourse(course);
+							System.out.println(ANSI_GREEN + "\nInactivating this course is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating this course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
