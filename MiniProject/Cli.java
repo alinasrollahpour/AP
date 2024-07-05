@@ -65,6 +65,7 @@ public class Cli
 				System.out.println("\t11. Deleting student from course");
 				System.out.println("\t12. Adding a passed course for a student");
 				System.out.println("\t. Deleting a passed course for a student");
+				System.out.println("\t. Print list of students");
 				System.out.println("\t. Active a course");
 				System.out.println("\t. Set deadline of an assignment");
 				System.out.println("\t. Deactivate an assignment");
@@ -141,7 +142,7 @@ public class Cli
 						try
 						{
 							System.out.println();
-							DataBase.teacherLoader().forEach(System.out::println);
+							DataBase.teacherLoader().stream().sorted((x, y) -> x.getTeacherId().compareTo(y.getTeacherId())).forEach(System.out::println);
 							System.out.println();
 						}
 						catch(EOFException	e)
@@ -253,7 +254,7 @@ public class Cli
 						try
 						{
 							System.out.println();
-							DataBase.courseLoader().forEach(System.out::println);
+							DataBase.courseLoader().stream().sorted((x, y) -> x.getCourseId().compareTo(y.getCourseId())).forEach(System.out::println);
 							System.out.println();
 						}
 						catch(EOFException	e)
@@ -361,7 +362,7 @@ public class Cli
 						try
 						{
 							System.out.println();
-							DataBase.assignmentLoader().forEach(System.out::println);
+							DataBase.assignmentLoader().stream().sorted((x, y) -> x.getAssignmentId().compareTo(y.getAssignmentId())).forEach(System.out::println);
 							System.out.println();
 						}
 						catch(EOFException	e)
