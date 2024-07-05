@@ -64,8 +64,8 @@ public class Cli
 				System.out.println("\t10. Adding student to course");
 				System.out.println("\t11. Deleting student from course");
 				System.out.println("\t12. Adding a passed course for a student");
-				System.out.println("\t. Deleting a passed course for a student");
-				System.out.println("\t. Print list of students");
+				System.out.println("\t13. Deleting a passed course for a student");
+				System.out.println("\t14. Print list of students");
 				System.out.println("\t. Active a course");
 				System.out.println("\t. Set deadline of an assignment");
 				System.out.println("\t. Deactivate an assignment");
@@ -637,6 +637,120 @@ public class Cli
 						break;
 					}
 					case "13":
+					{
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+						Student student;
+
+						try
+						{
+							if(DataBase.studentLoader().stream().map(Student::getStudentId).anyMatch(x -> x.equals(studentId)))
+							{
+								student = (Student) DataBase.studentLoader().stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting a passed course for a student isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+						Course course;
+
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								course = (Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting a passed course for a student isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(!course.isActive())
+						{
+							System.out.println(ANSI_RED + "\nCourse with this ID isn't active.\n" + ANSI_RESET);
+							break;
+						}
+						else if(!student.getPassedCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID doesn't passed this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						student.deletePassedCourse(course);
+
+						try
+						{
+							DataBase.addStudent(student);
+							System.out.println(ANSI_GREEN + "\nDeleting a passed course for a student is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting a passed course for a student isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "14":
+					{
+						try
+						{
+							System.out.println();
+							DataBase.studentLoader().stream().sorted((x, y) -> x.getStudentId().compareTo(y.getStudentId())).forEach(System.out::println);
+							System.out.println();
+						}
+						catch(EOFException	e)
+						{
+							System.out.println("\n");
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "Error: Printing list of students failed.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "15":
+					{
+
+
+						break;
+					}
+					case "16":
+					{
+
+
+						break;
+					}
+					case "17":
+					{
+
+
+						break;
+					}
+					case "18":
+					{
+
+
+						break;
+					}
+					case "19":
 					{
 
 
