@@ -21,7 +21,7 @@ public class Cli
 	{
 		Scanner input = new Scanner(System.in);
 
-		System.out.println(ANSI_GREEN + "Welcome!\n" + ANSI_RESET);
+		System.out.println(ANSI_GREEN + "\nWelcome!\n" + ANSI_RESET);
 		System.out.println("What is your role?");
 		System.out.println("\t\t1. Admin");
 		System.out.println("\t\t2. Teacher");
@@ -73,7 +73,7 @@ public class Cli
 				System.out.println("\t19. Enter/edit a score for a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
 
-				System.out.print("Please enter a number between 0 and : ");			//TODO
+				System.out.print("Please enter a number between 0 and 19: ");
 
 				switch(input.nextLine())
 				{
@@ -1017,53 +1017,151 @@ public class Cli
 					}
 					default:
 
-						System.out.println(ANSI_RED + "Error: Your number must be between 0 and ." + ANSI_RESET);			//TODO
+						System.out.println(ANSI_YELLOW + "\nYour number must be between 0 and 19.\n" + ANSI_RESET);
 				}
 			}
 		}
 		// Teacher
 		else
 		{
-			System.out.print("Please Enter your teacher ID: ");
-			String teacherId = input.next();
-			String teacherName = null;
+			Teacher teacher;
 
-			try(RandomAccessFile reader = new RandomAccessFile(new File("E:\\MyWorkspace\\AP_Project\\AP\\MiniProject\\Files\\teachers.txt"), "r"))
+			while(true)
 			{
-				boolean isCorrect = false;
+				System.out.print("Please Enter your teacher ID: ");
+				String teacherId = input.next();
 
-				while(!isCorrect)
+				try
 				{
-					String line;
-					String[] info;
-
-					while((line = reader.readLine()) != null)
+					if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).noneMatch(x -> x.equals(teacherId)))
 					{
-						info = line.split("~");
+						System.out.print(ANSI_YELLOW + "\nTeacher with this ID isn't exist. " + ANSI_RESET);
+					}
+					else
+					{
+						teacher = (Teacher) DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(teacherId)).toArray()[0];
+						break;
+					}
+				}
+				catch(IOException | ClassNotFoundException e)
+				{
+					System.out.println(ANSI_RED + "\nError: Please try again.\n" + ANSI_RESET);
+					return;
+				}
+			}
 
-						if(teacherId.equals(info[0]))
+			System.out.println(ANSI_GREEN + "\nWelcome " + teacher.getName() + "!\n" + ANSI_RESET);
+
+			Set<Course> courses = new HashSet<>();
+
+			try
+			{
+				Set<Course> dataBaseCourses = DataBase.courseLoader();
+
+				for(String courseId: teacher.getCoursesId())
+				{
+					for(Course dataBaseCourse: dataBaseCourses)
+					{
+						if(dataBaseCourse.getCourseId().equals(courseId))
 						{
-							teacherName = info[1];
-							isCorrect = true;
+							courses.add(dataBaseCourse);
 							break;
 						}
 					}
-
-					if(!isCorrect)
-					{
-						System.out.print(ANSI_RED + "The ID is incorrect! " + ANSI_RESET + "Please Enter your teacher ID: ");
-						teacherId = input.next();
-						reader.seek(0);
-					}
 				}
 			}
-			catch(IOException e)
+			catch(IOException | ClassNotFoundException e)
 			{
-				System.out.println(e.getMessage());
+				System.out.println(ANSI_RED + "\nError: Please try again.\n" + ANSI_RESET);
 				return;
 			}
 
-			System.out.println(ANSI_GREEN + "\nWelcome " + teacherName + "!\n" + ANSI_RESET);
+			boolean flag = true;
+
+			input.nextLine();
+			while(flag)
+			{
+				System.out.println(ANSI_BLUE + "Menu:");
+				System.out.println("\t1. Print list of courses");
+				System.out.println("\t. Adding/editing assignment");
+				System.out.println("\t. Print list of assignments");
+				System.out.println("\t. Deleting assignment");
+				System.out.println("\t. Adding student to course");
+				System.out.println("\t. Deleting student from course");
+				System.out.println("\t. Print list of students in a course");
+				System.out.println("\t. Set deadline of an assignment");
+				System.out.println("\t. Inactive an assignment");
+				System.out.println("\t. Enter/edit a score for a student's course");
+				System.out.println("\t0. Exit\n" + ANSI_RESET);
+
+				System.out.print("Please enter a number between 0 and : ");				//TODO
+
+				switch (input.nextLine())
+				{
+					case "1":
+					{
+						System.out.println();
+						courses.stream().sorted((x, y) -> x.getCourseId().compareTo(y.getCourseId())).forEach(System.out::println);
+						System.out.println();
+
+						break;
+					}
+					case "2":
+					{
+
+						break;
+					}
+					case "3":
+					{
+
+						break;
+					}
+					case "4":
+					{
+
+						break;
+					}
+					case "5":
+					{
+
+						break;
+					}
+					case "6":
+					{
+
+						break;
+					}
+					case "7":
+					{
+
+						break;
+					}
+					case "8":
+					{
+
+						break;
+					}
+					case "9":
+					{
+
+						break;
+					}
+					case "10":
+					{
+
+						break;
+					}
+					case "0":
+					{
+						flag = false;
+
+						break;
+					}
+					default:
+
+						System.out.println(ANSI_YELLOW + "\nYour number must be between 0 and .\n" + ANSI_RESET);		//TODO
+				}
+			}
 		}
 
 
