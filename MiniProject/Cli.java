@@ -66,7 +66,8 @@ public class Cli
 				System.out.println("\t12. Adding a passed course for a student");
 				System.out.println("\t13. Deleting a passed course for a student");
 				System.out.println("\t14. Print list of students");
-				System.out.println("\t. Active a course");
+				System.out.println("\t15. Active a course");
+				System.out.println("\t. Inactive a course");
 				System.out.println("\t. Set deadline of an assignment");
 				System.out.println("\t. Deactivate an assignment");
 				System.out.println("\t. Enter a score for a student's course");
@@ -78,12 +79,12 @@ public class Cli
 				{
 					case "1":
 					{
-						System.out.print("ID: ");
-						String id = input.nextLine();
+						System.out.print("Teacher ID: ");
+						String teacherId = input.nextLine();
 
 						try
 						{
-							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(id)))
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(teacherId)))
 							{
 								System.out.println(ANSI_BLUE + "Teacher with this ID is exist." + ANSI_RESET);
 							}
@@ -126,7 +127,7 @@ public class Cli
 
 						try
 						{
-							DataBase.addTeacher(new Teacher(name, id, coursesId));
+							DataBase.addTeacher(new Teacher(name, teacherId, coursesId));
 							System.out.println(ANSI_GREEN + "\nAdding/editing teacher is successful.\n" + ANSI_RESET);
 						}
 						catch(IOException | ClassNotFoundException e)
@@ -158,14 +159,29 @@ public class Cli
 					}
 					case "3":
 					{
-						System.out.print("ID: ");
-						String id = input.nextLine();
+						System.out.print("Teacher ID: ");
+						String teacherId = input.nextLine();
 
 						try
 						{
-							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(id)))
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(teacherId)))
 							{
-								DataBase.removeTeacher((Teacher) DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(id)).toArray()[0]);
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(teacherId)).toArray()[0];
+								DataBase.removeTeacher(teacher);
+
+								Set<Course> courses = DataBase.courseLoader();
+								for(String courseId: teacher.getCoursesId())
+								{
+									for(Course course: courses)
+									{
+										if(course.getCourseId().equals(courseId))
+										{
+											course.inactiveCourse();
+											DataBase.addCourse(course);
+											break;
+										}
+									}
+								}
 								System.out.println(ANSI_GREEN + "\nDeleting teacher is successful.\n" + ANSI_RESET);
 							}
 							else
@@ -277,7 +293,13 @@ public class Cli
 						{
 							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(id)))
 							{
-								DataBase.removeCourse((Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(id)).toArray()[0]);
+								Course course = (Course)DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(id)).toArray()[0];
+								DataBase.removeCourse(course);
+
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(course.getCourseId())).toArray()[0];
+								teacher.removeCourse(course);
+								DataBase.addTeacher(teacher);
+
 								System.out.println(ANSI_GREEN + "\nDeleting course is successful.\n" + ANSI_RESET);
 							}
 							else
@@ -728,7 +750,71 @@ public class Cli
 					}
 					case "15":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+						Course course;
 
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								course = (Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Activating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(course.isActive())
+						{
+							System.out.println(ANSI_RED + "\nCourse with this ID is active.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Teacher ID: ");
+						String teacherId = input.nextLine();
+
+						try
+						{
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).noneMatch(x -> x.equals(teacherId)))
+							{
+								System.out.println(ANSI_RED + "\nTeacher with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+							else
+							{
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(teacherId)).toArray()[0];
+								teacher.addCourse(courseId);
+								DataBase.addTeacher(teacher);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Activating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Exam date: ");
+						String examDate = input.nextLine();
+
+						course.activeCourse(teacherId, examDate);
+
+						try
+						{
+							DataBase.addCourse(course);
+							System.out.println(ANSI_GREEN + "\nActivating this course is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Activating this course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
