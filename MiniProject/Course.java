@@ -98,6 +98,8 @@ public class Course implements Serializable
             isActive = false;
             teacherId = null;
             examDate = null;
+            studentsId = new HashSet<>();
+            assignmentsId = new HashSet<>();
         }
     }
 
