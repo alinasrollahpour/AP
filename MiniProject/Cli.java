@@ -70,7 +70,7 @@ public class Cli
 				System.out.println("\t16. Inactive a course");
 				System.out.println("\t17. Set deadline of an assignment");
 				System.out.println("\t18. Inactive an assignment");
-				System.out.println("\t. Enter a score for a student's course");
+				System.out.println("\t19. Enter/edit a score for a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
 
 				System.out.print("Please enter a number between 0 and : ");			//TODO
@@ -939,7 +939,73 @@ public class Cli
 					}
 					case "19":
 					{
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+						Student student;
 
+						try
+						{
+							if(DataBase.studentLoader().stream().map(Student::getStudentId).anyMatch(x -> x.equals(studentId)))
+							{
+								student = (Student) DataBase.studentLoader().stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score for a student's course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						try
+						{
+							if(student.getTermCoursesId().containsKey(courseId))
+							{
+								System.out.print("Score: ");
+								double score;
+								score = input.nextDouble();
+								input.nextLine();
+
+								student.getTermCoursesId().replace(courseId, score);
+							}
+							else if(student.getPassedCoursesId().containsKey(courseId))
+							{
+								System.out.print("Score: ");
+								double score;
+								score = input.nextDouble();
+								input.nextLine();
+
+								student.getPassedCoursesId().replace(courseId, score);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nThe student doesn't have this course.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score for a student's course isn't successful.\n" + ANSI_RESET);
+							input.nextLine();
+							break;
+						}
+
+						try
+						{
+							DataBase.addStudent(student);
+							System.out.println(ANSI_GREEN + "\nEntering/editing score for a student's course is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score for a student's course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
