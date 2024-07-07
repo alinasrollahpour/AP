@@ -21,7 +21,7 @@ public class Cli
 	{
 		Scanner input = new Scanner(System.in);
 
-		System.out.println(ANSI_GREEN + "Welcome!\n" + ANSI_RESET);
+		System.out.println(ANSI_GREEN + "\nWelcome!\n" + ANSI_RESET);
 		System.out.println("What is your role?");
 		System.out.println("\t\t1. Admin");
 		System.out.println("\t\t2. Teacher");
@@ -66,24 +66,25 @@ public class Cli
 				System.out.println("\t12. Adding a passed course for a student");
 				System.out.println("\t13. Deleting a passed course for a student");
 				System.out.println("\t14. Print list of students");
-				System.out.println("\t. Active a course");
-				System.out.println("\t. Set deadline of an assignment");
-				System.out.println("\t. Deactivate an assignment");
-				System.out.println("\t. Enter a score for a student's course");
+				System.out.println("\t15. Active a course");
+				System.out.println("\t16. Inactive a course");
+				System.out.println("\t17. Set deadline of an assignment");
+				System.out.println("\t18. Inactive an assignment");
+				System.out.println("\t19. Enter/edit a score of a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
 
-				System.out.print("Please enter a number between 0 and : ");			//TODO
+				System.out.print("Please enter a number between 0 and 19: ");
 
 				switch(input.nextLine())
 				{
 					case "1":
 					{
-						System.out.print("ID: ");
-						String id = input.nextLine();
+						System.out.print("Teacher ID: ");
+						String teacherId = input.nextLine();
 
 						try
 						{
-							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(id)))
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(teacherId)))
 							{
 								System.out.println(ANSI_BLUE + "Teacher with this ID is exist." + ANSI_RESET);
 							}
@@ -126,7 +127,7 @@ public class Cli
 
 						try
 						{
-							DataBase.addTeacher(new Teacher(name, id, coursesId));
+							DataBase.addTeacher(new Teacher(name, teacherId, coursesId));
 							System.out.println(ANSI_GREEN + "\nAdding/editing teacher is successful.\n" + ANSI_RESET);
 						}
 						catch(IOException | ClassNotFoundException e)
@@ -158,14 +159,29 @@ public class Cli
 					}
 					case "3":
 					{
-						System.out.print("ID: ");
-						String id = input.nextLine();
+						System.out.print("Teacher ID: ");
+						String teacherId = input.nextLine();
 
 						try
 						{
-							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(id)))
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).anyMatch(x -> x.equals(teacherId)))
 							{
-								DataBase.removeTeacher((Teacher) DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(id)).toArray()[0]);
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(teacherId)).toArray()[0];
+								DataBase.removeTeacher(teacher);
+
+								Set<Course> courses = DataBase.courseLoader();
+								for(String courseId: teacher.getCoursesId())
+								{
+									for(Course course: courses)
+									{
+										if(course.getCourseId().equals(courseId))
+										{
+											course.inactiveCourse();
+											DataBase.addCourse(course);
+											break;
+										}
+									}
+								}
 								System.out.println(ANSI_GREEN + "\nDeleting teacher is successful.\n" + ANSI_RESET);
 							}
 							else
@@ -277,7 +293,13 @@ public class Cli
 						{
 							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(id)))
 							{
-								DataBase.removeCourse((Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(id)).toArray()[0]);
+								Course course = (Course)DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(id)).toArray()[0];
+								DataBase.removeCourse(course);
+
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(course.getCourseId())).toArray()[0];
+								teacher.removeCourse(course);
+								DataBase.addTeacher(teacher);
+
 								System.out.println(ANSI_GREEN + "\nDeleting course is successful.\n" + ANSI_RESET);
 							}
 							else
@@ -464,6 +486,7 @@ public class Cli
 						{
 							DataBase.addCourse(course);
 							DataBase.addStudent(student);
+
 							System.out.println(ANSI_GREEN + "\nAdding student to course is successful.\n" + ANSI_RESET);
 						}
 						catch(IOException | ClassNotFoundException e)
@@ -728,31 +751,262 @@ public class Cli
 					}
 					case "15":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+						Course course;
 
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								course = (Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Activating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(course.isActive())
+						{
+							System.out.println(ANSI_RED + "\nCourse with this ID is active.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Teacher ID: ");
+						String teacherId = input.nextLine();
+
+						try
+						{
+							if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).noneMatch(x -> x.equals(teacherId)))
+							{
+								System.out.println(ANSI_RED + "\nTeacher with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+							else
+							{
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(teacherId)).toArray()[0];
+								teacher.addCourse(courseId);
+								DataBase.addTeacher(teacher);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Activating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Exam date: ");
+						String examDate = input.nextLine();
+
+						course.activeCourse(teacherId, examDate);
+
+						try
+						{
+							DataBase.addCourse(course);
+							System.out.println(ANSI_GREEN + "\nActivating this course is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Activating this course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
 					case "16":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+						Course course;
 
+						try
+						{
+							if(DataBase.courseLoader().stream().map(Course::getCourseId).anyMatch(x -> x.equals(courseId)))
+							{
+								course = (Course) DataBase.courseLoader().stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nCourse with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+								Teacher teacher = (Teacher)DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(course.getTeacherId())).toArray()[0];
+
+								if(teacher != null)
+								{
+									teacher.removeCourse(courseId);
+									DataBase.addTeacher(teacher);
+								}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating this course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						course.inactiveCourse();
+
+						try
+						{
+							DataBase.addCourse(course);
+							System.out.println(ANSI_GREEN + "\nInactivating this course is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating this course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
 					case "17":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
 
+						try
+						{
+							if(DataBase.assignmentLoader().stream().map(Assignment::getAssignmentId).anyMatch(x -> x.equals(assignmentId)))
+							{
+								Assignment assignment = (Assignment)DataBase.assignmentLoader().stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+
+								System.out.print("Deadline: ");
+								String deadline = input.nextLine();
+
+								assignment.setDeadline(deadline);
+								DataBase.addAssignment(assignment);
+
+								System.out.println(ANSI_GREEN + "\nSet deadline of the assignment is successful.\n" + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Set deadline of the assignment isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
 					case "18":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
 
+						try
+						{
+							if(DataBase.assignmentLoader().stream().map(Assignment::getAssignmentId).anyMatch(x -> x.equals(assignmentId)))
+							{
+								Assignment assignment = (Assignment)DataBase.assignmentLoader().stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+
+								if(!assignment.isActive())
+								{
+									System.out.println(ANSI_RED + "\nThe assignment is inactive.\n" + ANSI_RESET);
+									break;
+								}
+
+								assignment.inactive();
+								DataBase.addAssignment(assignment);
+
+								System.out.println(ANSI_GREEN + "\nInactivating the assignment is successful.\n" + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating the assignment isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
 					case "19":
 					{
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+						Student student;
 
+						try
+						{
+							if(DataBase.studentLoader().stream().map(Student::getStudentId).anyMatch(x -> x.equals(studentId)))
+							{
+								student = (Student) DataBase.studentLoader().stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score of a student's course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						try
+						{
+							if(student.getTermCoursesId().containsKey(courseId))
+							{
+								System.out.print("Score: ");
+								double score;
+								score = input.nextDouble();
+								input.nextLine();
+
+								student.getTermCoursesId().replace(courseId, score);
+							}
+							else if(student.getPassedCoursesId().containsKey(courseId))
+							{
+								System.out.print("Score: ");
+								double score;
+								score = input.nextDouble();
+								input.nextLine();
+
+								student.getPassedCoursesId().replace(courseId, score);
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nThe student doesn't have this course.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score of a student's course isn't successful.\n" + ANSI_RESET);
+							input.nextLine();
+							break;
+						}
+
+						try
+						{
+							DataBase.addStudent(student);
+							System.out.println(ANSI_GREEN + "\nEntering/editing score of a student's course is successful.\n" + ANSI_RESET);
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score of a student's course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
@@ -764,56 +1018,609 @@ public class Cli
 					}
 					default:
 
-						System.out.println(ANSI_RED + "Error: Your number must be between 0 and ." + ANSI_RESET);			//TODO
+						System.out.println(ANSI_YELLOW + "\nYour number must be between 0 and 19.\n" + ANSI_RESET);
 				}
 			}
 		}
 		// Teacher
 		else
 		{
-			System.out.print("Please Enter your teacher ID: ");
-			String teacherId = input.next();
-			String teacherName = null;
+			Teacher teacher;
 
-			try(RandomAccessFile reader = new RandomAccessFile(new File("E:\\MyWorkspace\\AP_Project\\AP\\MiniProject\\Files\\teachers.txt"), "r"))
+			while(true)
 			{
-				boolean isCorrect = false;
+				System.out.print("Please Enter your teacher ID: ");
+				String teacherId = input.next();
 
-				while(!isCorrect)
+				try
 				{
-					String line;
-					String[] info;
-
-					while((line = reader.readLine()) != null)
+					if(DataBase.teacherLoader().stream().map(Teacher::getTeacherId).noneMatch(x -> x.equals(teacherId)))
 					{
-						info = line.split("~");
+						System.out.print(ANSI_YELLOW + "\nTeacher with this ID isn't exist. " + ANSI_RESET);
+					}
+					else
+					{
+						teacher = (Teacher) DataBase.teacherLoader().stream().filter(x -> x.getTeacherId().equals(teacherId)).toArray()[0];
+						break;
+					}
+				}
+				catch(IOException | ClassNotFoundException e)
+				{
+					System.out.println(ANSI_RED + "\nError: Please try again.\n" + ANSI_RESET);
+					return;
+				}
+			}
 
-						if(teacherId.equals(info[0]))
+			System.out.println(ANSI_GREEN + "\nWelcome " + teacher.getName() + "!\n" + ANSI_RESET);
+
+			Set<Course> courses = new HashSet<>();
+
+			try
+			{
+				Set<Course> dataBaseCourses = DataBase.courseLoader();
+
+				for(String courseId: teacher.getCoursesId())
+				{
+					for(Course dataBaseCourse: dataBaseCourses)
+					{
+						if(dataBaseCourse.getCourseId().equals(courseId))
 						{
-							teacherName = info[1];
-							isCorrect = true;
+							courses.add(dataBaseCourse);
 							break;
 						}
 					}
-
-					if(!isCorrect)
-					{
-						System.out.print(ANSI_RED + "The ID is incorrect! " + ANSI_RESET + "Please Enter your teacher ID: ");
-						teacherId = input.next();
-						reader.seek(0);
-					}
 				}
 			}
-			catch(IOException e)
+			catch(IOException | ClassNotFoundException e)
 			{
-				System.out.println(e.getMessage());
+				System.out.println(ANSI_RED + "\nError: Please try again.\n" + ANSI_RESET);
 				return;
 			}
 
-			System.out.println(ANSI_GREEN + "\nWelcome " + teacherName + "!\n" + ANSI_RESET);
+			boolean flag = true;
+
+			input.nextLine();
+			while(flag)
+			{
+				System.out.println(ANSI_BLUE + "Menu:");
+				System.out.println("\t1. Print list of courses");
+				System.out.println("\t2. Adding/editing assignment");
+				System.out.println("\t3. Print list of assignments");
+				System.out.println("\t4. Deleting assignment");
+				System.out.println("\t5. Adding student to course");
+				System.out.println("\t6. Print list of students in a course");
+				System.out.println("\t7. Deleting student from course");
+				System.out.println("\t8. Set deadline of an assignment");
+				System.out.println("\t9. Inactive an assignment");
+				System.out.println("\t10. Enter/edit score of a student's course");
+				System.out.println("\t0. Exit\n" + ANSI_RESET);
+
+				System.out.print("Please enter a number between 0 and 10: ");
+
+				switch (input.nextLine())
+				{
+					case "1":
+					{
+						System.out.println();
+						courses.stream().sorted((x, y) -> x.getCourseId().compareTo(y.getCourseId())).forEach(System.out::println);
+						System.out.println();
+
+						break;
+					}
+					case "2":
+					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								Assignment assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+
+								if(!assignment.getCourseId().equals(courseId))
+								{
+									System.out.println(ANSI_RED + "\nThis assignment doesn't belong to this course.\n" + ANSI_RESET);
+									break;
+								}
+
+								System.out.println(ANSI_BLUE + "Assignment with this ID is exist." + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_BLUE + "Assignment with this ID isn't exist." + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding/editing assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Detail: ");
+						String detail = input.nextLine();
+
+						System.out.print(ANSI_BLUE + "Is the assignment active?(y/n) " + ANSI_RESET);
+
+						while(true)
+						{
+							try
+							{
+								String answer = input.nextLine();
+								if(answer.equals("y"))
+								{
+									System.out.print("Deadline: ");
+									String deadline = input.nextLine();
+
+									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId, deadline));
+
+									course.addAssignment(assignmentId);
+									DataBase.addCourse(course);
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+								else if(answer.equals("n"))
+								{
+									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId));
+
+									course.addAssignment(assignmentId);
+									DataBase.addCourse(course);
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+
+								System.out.print(ANSI_BLUE + "Is the assignment active?(y/n) " + ANSI_RESET);
+							}
+							catch(IOException | ClassNotFoundException e)
+							{
+								System.out.println(ANSI_RED + "\nError: Adding/editing assignment isn't successful.\n" + ANSI_RESET);
+							}
+						}
+
+						break;
+					}
+					case "3":
+					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							System.out.println();
+							for(Object object: course.getAssignmentsId().stream().sorted().toArray())
+							{
+								String assignmentId = (String)object;
+								if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+								{
+									System.out.println(((Assignment) assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0]));
+								}
+							}
+							System.out.println();
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Printing list of assignments isn't successful.\n"+ ANSI_RESET);
+							break;
+						}
+
+						break;
+					}
+					case "4":
+					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						Assignment assignment;
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(assignment.getCourseId())))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(assignment.getCourseId())).toArray()[0];
+
+						try
+						{
+							DataBase.removeAssignment(assignment);
+
+							course.deleteAssignment(assignmentId);
+							DataBase.addCourse(course);
+
+							System.out.println(ANSI_GREEN + "\nDeleting assignment is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting assignment isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "5":
+					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+
+						Student student;
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+							{
+								student = (Student)students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding student to the course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(student.getTermCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID has this course.\n" + ANSI_RESET);
+							break;
+						}
+						else if(student.getPassedCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID passed this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+							course.addStudent(student);
+							student.addCourse(course);
+
+							DataBase.addStudent(student);
+							DataBase.addCourse(course);
+
+							System.out.println(ANSI_GREEN + "\nAdding student to the course is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding student to the course isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "6":
+					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							System.out.println();
+							for(Object object: course.getStudentsId().stream().sorted().toArray())
+							{
+								String studentId = (String)object;
+								if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+								{
+									System.out.println(((Student) students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0]));
+								}
+							}
+							System.out.println();
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Printing list of students in the course isn't successful.\n"+ ANSI_RESET);
+							break;
+						}
+
+						break;
+					}
+					case "7":
+					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+
+						Student student;
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+							{
+								student = (Student)students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting student from the course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(!student.getTermCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID hasn't this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+							course.deleteStudent(student);
+							student.deleteTermCourse(course);
+
+							DataBase.addStudent(student);
+							DataBase.addCourse(course);
+
+							System.out.println(ANSI_GREEN + "\nDeleting student from the course is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting student from the course isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "8":
+					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						Assignment assignment;
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Setting deadline of the assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(assignment.getCourseId())))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Deadline: ");
+						assignment.setDeadline(input.nextLine());
+
+						try
+						{
+							DataBase.addAssignment(assignment);
+
+							System.out.println(ANSI_GREEN + "\nSetting deadline of the assignment is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Setting deadline of the assignment isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "9":
+					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						Assignment assignment;
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating the assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(assignment.getCourseId())))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						assignment.inactive();
+
+						try
+						{
+							DataBase.addAssignment(assignment);
+
+							System.out.println(ANSI_GREEN + "\nInactivating the assignment is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Inactivating the assignment isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "10":
+					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+
+						Student student;
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+							{
+								student = (Student)students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score of a student's course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(!student.getTermCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID hasn't this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+							System.out.print("Score: ");
+							double score;
+							score = input.nextDouble();
+							input.nextLine();
+
+							student.getTermCoursesId().replace(courseId, score);
+
+							DataBase.addStudent(student);
+
+							System.out.println(ANSI_GREEN + "\nEntering/editing score of a student's course is successful.\n" + ANSI_RESET);
+						}
+						catch(InputMismatchException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score of a student's course isn't successful.\n" + ANSI_RESET);
+							input.nextLine();
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Entering/editing score of a student's course isn't successful.\n" + ANSI_RESET);
+						}
+
+						break;
+					}
+					case "0":
+					{
+						flag = false;
+
+						break;
+					}
+					default:
+
+						System.out.println(ANSI_YELLOW + "\nYour number must be between 0 and 10.\n" + ANSI_RESET);
+				}
+			}
 		}
-
-
 		input.close();
 	}
 }
