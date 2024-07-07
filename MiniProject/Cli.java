@@ -1088,8 +1088,8 @@ public class Cli
 				System.out.println("\t3. Print list of assignments");
 				System.out.println("\t4. Deleting assignment");
 				System.out.println("\t5. Adding student to course");
+				System.out.println("\t6. Print list of students in a course");
 				System.out.println("\t. Deleting student from course");
-				System.out.println("\t. Print list of students in a course");
 				System.out.println("\t. Set deadline of an assignment");
 				System.out.println("\t. Inactive an assignment");
 				System.out.println("\t. Enter/edit a score for a student's course");
@@ -1351,6 +1351,37 @@ public class Cli
 					}
 					case "6":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							System.out.println();
+							for(Object object: course.getStudentsId().stream().sorted().toArray())
+							{
+								String studentId = (String)object;
+								if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+								{
+									System.out.println(((Student) students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0]));
+								}
+							}
+							System.out.println();
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Printing list of students in the course isn't successful.\n"+ ANSI_RESET);
+							break;
+						}
 
 						break;
 					}
