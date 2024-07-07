@@ -1089,7 +1089,7 @@ public class Cli
 				System.out.println("\t4. Deleting assignment");
 				System.out.println("\t5. Adding student to course");
 				System.out.println("\t6. Print list of students in a course");
-				System.out.println("\t. Deleting student from course");
+				System.out.println("\t7. Deleting student from course");
 				System.out.println("\t. Set deadline of an assignment");
 				System.out.println("\t. Inactive an assignment");
 				System.out.println("\t. Enter/edit a score for a student's course");
@@ -1387,6 +1387,62 @@ public class Cli
 					}
 					case "7":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+
+						Student student;
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+							{
+								student = (Student)students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting student from the course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(!student.getTermCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID hasn't this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+							course.deleteStudent(student);
+							student.deleteTermCourse(course);
+
+							DataBase.addStudent(student);
+							DataBase.addCourse(course);
+
+							System.out.println(ANSI_GREEN + "\nDeleting student from the course is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting student from the course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
