@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class RoundedTextField extends StatelessWidget {
   final TextEditingController? controller;
-  final String? labelText;
+  final String? hintText;
   final Color borderColor;
   final double borderRadius;
   final Color fillColor;
@@ -13,9 +13,9 @@ class RoundedTextField extends StatelessWidget {
   final bool obscureText;
 
   const RoundedTextField({
-    Key? key,
+    super.key,
     this.controller,
-    this.labelText,
+    this.hintText,
     this.borderColor = Colors.grey,
     this.borderRadius = 30.0,
     this.fillColor = Colors.white,
@@ -24,7 +24,7 @@ class RoundedTextField extends StatelessWidget {
     this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     this.icon,
     this.obscureText = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +33,14 @@ class RoundedTextField extends StatelessWidget {
       style: textStyle,
       obscureText: obscureText,
       decoration: InputDecoration(
-        labelText: labelText,
+        hintText: hintText,
         labelStyle: labelStyle,
         fillColor: fillColor,
         contentPadding: contentPadding,
+        filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
-          borderSide: BorderSide(color: borderColor),
+          borderSide: BorderSide(color: borderColor)
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),

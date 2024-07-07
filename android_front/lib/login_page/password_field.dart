@@ -12,7 +12,7 @@ class PasswordField extends StatefulWidget {
   final Icon? icon;
 
   const PasswordField({
-    Key? key,
+    super.key,
     this.controller,
     this.labelText,
     this.borderColor = Colors.grey,
@@ -22,7 +22,7 @@ class PasswordField extends StatefulWidget {
     this.labelStyle,
     this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   _PasswordFieldState createState() => _PasswordFieldState();
@@ -44,8 +44,9 @@ class _PasswordFieldState extends State<PasswordField> {
       style: widget.textStyle,
       obscureText: _obscureText,
       decoration: InputDecoration(
-        labelText: widget.labelText,
-        labelStyle: widget.labelStyle,
+        filled: true,
+        hintText: widget.labelText,
+        hintStyle: widget.labelStyle,
         fillColor: widget.fillColor,
         contentPadding: widget.contentPadding,
         border: OutlineInputBorder(

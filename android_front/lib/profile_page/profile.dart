@@ -1,14 +1,13 @@
 import 'package:android_front/ali_text_field.dart';
 import 'package:android_front/profile_page/Avatar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:android_front/ali_button.dart';
 import 'package:android_front/ali_container.dart';
-import 'package:android_front/login_page/number_field.dart';
-import 'package:android_front/login_page/password_field.dart';
-import 'package:flutter/widgets.dart';
 
 class ProfilePage extends StatelessWidget {
+  const ProfilePage({super.key});
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -22,13 +21,13 @@ class ProfilePage extends StatelessWidget {
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.add_a_photo_outlined),
+              icon: const Icon(Icons.add_a_photo_outlined),
               color: Colors.white,
             ),
-            Expanded(
+            const Expanded(
               child: SizedBox(),
             ),
-            Text(
+            const Text(
               'اطلاعات کاربری',
               style: TextStyle(color: Colors.white),
             )
@@ -39,25 +38,27 @@ class ProfilePage extends StatelessWidget {
         child: ListView(
           children: [
             RoundedContainer(
+              backgroundColor: Colors.blueAccent.shade100,
+                borderWidth: 0,
                 child: Column(
               children: [
-                Row(
+                const Row(
                   children: [
                     Expanded(
                       child: RoundedTextField(
                         borderColor: Colors.blueAccent,
                       ),
                     ),
-                    Container(
+                    SizedBox(
                         width: 100,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                           child: Text('نام دانشجو'),
                         ))
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: Row(
                     children: [
                       Expanded(
@@ -65,10 +66,10 @@ class ProfilePage extends StatelessWidget {
                           borderColor: Colors.blueAccent,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                           width: 100,
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                            padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                             child: Text('شناسه کاربری'),
                           ))
                     ],
@@ -79,14 +80,14 @@ class ProfilePage extends StatelessWidget {
                     Expanded(
                       child: RoundedTextField(
                         controller: TextEditingController(),
-                        labelText: 'YYYY/MM/DD',
+                        hintText: 'YYYY/MM/DD',
                         borderColor: Colors.blueAccent,
                       ),
                     ),
-                    Container(
+                    const SizedBox(
                         width: 100,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
                           child: Text('تاریخ تولد'),
                         ))
                   ],
@@ -96,7 +97,7 @@ class ProfilePage extends StatelessWidget {
             Row(
               children: [
                 Padding(
-                  padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
                   child: RoundedButton(
                       text: 'تغییر گذرواژه',
                       color: Colors.orange,
@@ -115,25 +116,28 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+              padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: RoundedContainer(
+                borderWidth: 0,
+                  backgroundColor: Colors.grey.shade200,
                   child: Center(
                       child: Text(
                 'شماره دانشجویی: 109859793     ترم: 2',
                 style: TextStyle(fontSize: 17),
-              ))),
+              ))
+              ),
             ),
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
                 child: ConstrainedBox(
-                    constraints: BoxConstraints.tightFor(width: 190),
+                    constraints: const BoxConstraints.tightFor(width: 190),
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.red),
                         onPressed: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
+                        child: const Padding(
+                          padding: EdgeInsets.all(5.0),
                           child: Row(
                             children: [
                               Icon(
