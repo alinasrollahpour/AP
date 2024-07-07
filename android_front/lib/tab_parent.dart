@@ -1,5 +1,11 @@
 import 'package:android_front/ali_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:android_front/workstation_pages/kara.dart';
+import 'package:android_front/workstation_pages/sara.dart';
+import 'package:android_front/workstation_pages/kelasa.dart';
+import 'package:android_front/workstation_pages/khabara.dart';
+import 'package:android_front/workstation_pages/tamrina.dart';
+
 
 class TabParent extends StatelessWidget {
   @override
@@ -24,12 +30,19 @@ class TabParent extends StatelessWidget {
 
           ),
         ),
-        body: const TabBarView(
-          children: [
-            Icon(Icons.directions_car),
-            Icon(Icons.directions_transit),
-            Icon(Icons.directions_bike),
-          ],
+        body: SingleChildScrollView(
+          child: SizedBox(
+            height: 2000,
+            child: TabBarView(
+              children: [
+                Sara(),
+                Kara(),
+                Kelasa(),
+                Khabara(),
+                Tamrina()
+              ],
+            ),
+          ),
         ),
       ),
     );
