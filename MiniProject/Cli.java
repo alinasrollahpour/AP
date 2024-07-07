@@ -1090,7 +1090,7 @@ public class Cli
 				System.out.println("\t5. Adding student to course");
 				System.out.println("\t6. Print list of students in a course");
 				System.out.println("\t7. Deleting student from course");
-				System.out.println("\t. Set deadline of an assignment");
+				System.out.println("\t8. Set deadline of an assignment");
 				System.out.println("\t. Inactive an assignment");
 				System.out.println("\t. Enter/edit a score for a student's course");
 				System.out.println("\t0. Exit\n" + ANSI_RESET);
@@ -1448,6 +1448,52 @@ public class Cli
 					}
 					case "8":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						Assignment assignment;
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Setting deadline of the assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(assignment.getCourseId())))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(assignment.getCourseId())).toArray()[0];
+
+						System.out.print("Deadline: ");
+						assignment.setDeadline(input.nextLine());
+
+						try
+						{
+							DataBase.addAssignment(assignment);
+
+							System.out.println(ANSI_GREEN + "\nSetting deadline of the assignment is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Setting deadline of the assignment isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
