@@ -1084,7 +1084,7 @@ public class Cli
 				System.out.println(ANSI_BLUE + "Menu:");
 				System.out.println("\t1. Print list of courses");
 				System.out.println("\t2. Adding/editing assignment");
-				System.out.println("\t. Print list of assignments");
+				System.out.println("\t3. Print list of assignments");
 				System.out.println("\t. Deleting assignment");
 				System.out.println("\t. Adding student to course");
 				System.out.println("\t. Deleting student from course");
@@ -1166,6 +1166,9 @@ public class Cli
 
 									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId, deadline));
 
+									course.addAssignment(assignmentId);
+									DataBase.addCourse(course);
+
 									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
 
 									break;
@@ -1173,6 +1176,9 @@ public class Cli
 								else if(answer.equals("n"))
 								{
 									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId));
+
+									course.addAssignment(assignmentId);
+									DataBase.addCourse(course);
 
 									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
 
@@ -1191,6 +1197,37 @@ public class Cli
 					}
 					case "3":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							System.out.println();
+							for(Object object: course.getAssignmentsId().stream().sorted().toArray())
+							{
+								String assignmentId = (String)object;
+								if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+								{
+									System.out.println(((Assignment) assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0]));
+								}
+							}
+							System.out.println();
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Printing list of assignments isn't successful.\n"+ ANSI_RESET);
+							break;
+						}
 
 						break;
 					}
