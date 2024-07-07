@@ -486,6 +486,7 @@ public class Cli
 						{
 							DataBase.addCourse(course);
 							DataBase.addStudent(student);
+
 							System.out.println(ANSI_GREEN + "\nAdding student to course is successful.\n" + ANSI_RESET);
 						}
 						catch(IOException | ClassNotFoundException e)
@@ -1086,7 +1087,7 @@ public class Cli
 				System.out.println("\t2. Adding/editing assignment");
 				System.out.println("\t3. Print list of assignments");
 				System.out.println("\t4. Deleting assignment");
-				System.out.println("\t. Adding student to course");
+				System.out.println("\t5. Adding student to course");
 				System.out.println("\t. Deleting student from course");
 				System.out.println("\t. Print list of students in a course");
 				System.out.println("\t. Set deadline of an assignment");
@@ -1284,6 +1285,67 @@ public class Cli
 					}
 					case "5":
 					{
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						System.out.print("Student ID: ");
+						String studentId = input.nextLine();
+
+						Student student;
+						try
+						{
+							Set<Student> students = DataBase.studentLoader();
+
+							if(students.stream().anyMatch(x -> x.getStudentId().equals(studentId)))
+							{
+								student = (Student)students.stream().filter(x -> x.getStudentId().equals(studentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nStudent with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding student to the course isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(student.getTermCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID has this course.\n" + ANSI_RESET);
+							break;
+						}
+						else if(student.getPassedCoursesId().containsKey(courseId))
+						{
+							System.out.println(ANSI_RED + "\nStudent with this ID passed this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						try
+						{
+							course.addStudent(student);
+							student.addCourse(course);
+
+							DataBase.addStudent(student);
+							DataBase.addCourse(course);
+
+							System.out.println(ANSI_GREEN + "\nAdding student to the course is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding student to the course isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
