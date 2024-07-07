@@ -1083,7 +1083,7 @@ public class Cli
 			{
 				System.out.println(ANSI_BLUE + "Menu:");
 				System.out.println("\t1. Print list of courses");
-				System.out.println("\t. Adding/editing assignment");
+				System.out.println("\t2. Adding/editing assignment");
 				System.out.println("\t. Print list of assignments");
 				System.out.println("\t. Deleting assignment");
 				System.out.println("\t. Adding student to course");
@@ -1108,6 +1108,84 @@ public class Cli
 					}
 					case "2":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						System.out.print("Course ID: ");
+						String courseId = input.nextLine();
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(courseId)))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(courseId)).toArray()[0];
+
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								Assignment assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+
+								if(!assignment.getCourseId().equals(courseId))
+								{
+									System.out.println(ANSI_RED + "\nThis assignment doesn't belong to this course.\n" + ANSI_RESET);
+									break;
+								}
+
+								System.out.println(ANSI_BLUE + "Assignment with this ID is exist." + ANSI_RESET);
+							}
+							else
+							{
+								System.out.println(ANSI_BLUE + "Assignment with this ID isn't exist." + ANSI_RESET);
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Adding/editing assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						System.out.print("Detail: ");
+						String detail = input.nextLine();
+
+						System.out.print(ANSI_BLUE + "Is the assignment active?(y/n) " + ANSI_RESET);
+
+						while(true)
+						{
+							try
+							{
+								String answer = input.nextLine();
+								if(answer.equals("y"))
+								{
+									System.out.print("Deadline: ");
+									String deadline = input.nextLine();
+
+									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId, deadline));
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+								else if(answer.equals("n"))
+								{
+									DataBase.addAssignment(new Assignment(assignmentId, detail, courseId));
+
+									System.out.println(ANSI_GREEN + "\nAdding/editing assignment is successful.\n" + ANSI_RESET);
+
+									break;
+								}
+
+								System.out.print(ANSI_BLUE + "Is the assignment active?(y/n) " + ANSI_RESET);
+							}
+							catch(IOException | ClassNotFoundException e)
+							{
+								System.out.println(ANSI_RED + "\nError: Adding/editing assignment isn't successful.\n" + ANSI_RESET);
+							}
+						}
 
 						break;
 					}
