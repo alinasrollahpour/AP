@@ -1,24 +1,51 @@
+import 'package:android_front/tab_parent.dart';
 import 'package:flutter/material.dart';
 import 'package:android_front/profile_page/profile.dart';
 import 'package:android_front/login_page/login.dart';
 import 'package:android_front/signup_page/signup.dart';
+import 'dart:io';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class FrontBase {
+class Base {
+  bool isConnected = false;
+  //socket sock
 
+  //incomplete
+  //connect to 10.0.2.2:port
+  static bool connect(String port) {
+    return false;
+  }
+
+  //incomplete
+  //shows related toast notifications and returns false
+  //if successful returns true
+  static bool login(String s_id, String passwd) {
+    Fluttertoast.showToast(msg: "Login methode called!", fontSize: 22);
+    return false;
+  }
+
+  //incomplete
+  //shows related toast notifications and returns false
+  //if successful returns true
+  static bool signup(String name, String s_id, String u_id,
+      String passwd, String passwd2){
+    return false;
+  }
 }
 
-FrontBase base = FrontBase();
-
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
+    Exception e = Exception("hooo!");
+    print(e.toString());
     return MaterialApp(
-        locale: Locale('ar', 'AE'),
-
+        locale: const Locale('ar', 'AE'),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'IRANSans', // Set the default font family here
@@ -30,58 +57,10 @@ class MyApp extends StatelessWidget {
             final TextDirection textDirection = Directionality.of(context);
 
             //return LoginPage();
-            return ProfilePage();
+            //return const ProfilePage();
             //return SignupPage();
+            return TabParent();
           },
         )); //LoginPage());
   }
 }
-
-//old
-
-/*
-Scaffold(
-          drawer: Drawer(
-            shadowColor: Colors.white,
-            child: ListView(
-              children: <Widget>[
-                ListTile(
-                  title: Text("New chat"),
-                )
-              ],
-            ),
-          ),
-          appBar: AppBar(
-            toolbarOpacity: 0.3,
-            backgroundColor: Colors.blue,
-            title: Text(
-              'Natzigram',
-              style: TextStyle(fontSize: 25, color: Colors.white),
-            ),
-          ),
-          body: Center(
-            child: Container(
-                child: Column(children: [
-              Text(
-                "Hile Hitler!",
-                style: TextStyle(fontSize: 50, color: Colors.blue),
-              ),
-             RoundedButton(text: 'Join to army',
-                 color: Colors.white,
-                 textColor: Colors.black,
-                 onPressed: (){}),
-              Padding(
-                  padding: EdgeInsets.all(11.0),
-                  child: RoundedTextField(
-
-                  )),
-              ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Join party now',
-                    style: TextStyle(fontSize: 30, color: Colors.red),
-                  ))
-            ])),
-          ),
-        )
-*/

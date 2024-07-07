@@ -13,7 +13,7 @@ class NumberField extends StatelessWidget {
   final bool obscureText;
 
   const NumberField({
-    Key? key,
+    super.key,
     this.controller,
     this.labelText,
     this.borderColor = Colors.grey,
@@ -24,7 +24,7 @@ class NumberField extends StatelessWidget {
     this.contentPadding = const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
     this.icon,
     this.obscureText = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +34,9 @@ class NumberField extends StatelessWidget {
       style: textStyle,
       obscureText: obscureText,
       decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: labelStyle,
+        filled: true,
+        hintText: labelText,
+        hintStyle: labelStyle,
         fillColor: fillColor,
         contentPadding: contentPadding,
         border: OutlineInputBorder(

@@ -10,7 +10,7 @@ class RoundedContainer extends StatelessWidget {
   final EdgeInsetsGeometry margin;
 
   const RoundedContainer({
-    Key? key,
+    super.key,
     required this.child,
     this.borderRadius = 30.0,
     this.borderColor = Colors.grey,
@@ -18,7 +18,7 @@ class RoundedContainer extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.padding = const EdgeInsets.all(15.0),
     this.margin = const EdgeInsets.all(15.0),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
