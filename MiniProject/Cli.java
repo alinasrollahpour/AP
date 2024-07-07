@@ -1085,7 +1085,7 @@ public class Cli
 				System.out.println("\t1. Print list of courses");
 				System.out.println("\t2. Adding/editing assignment");
 				System.out.println("\t3. Print list of assignments");
-				System.out.println("\t. Deleting assignment");
+				System.out.println("\t4. Deleting assignment");
 				System.out.println("\t. Adding student to course");
 				System.out.println("\t. Deleting student from course");
 				System.out.println("\t. Print list of students in a course");
@@ -1233,6 +1233,52 @@ public class Cli
 					}
 					case "4":
 					{
+						System.out.print("Assignment ID: ");
+						String assignmentId = input.nextLine();
+
+						Assignment assignment;
+						try
+						{
+							Set<Assignment> assignments = DataBase.assignmentLoader();
+
+							if(assignments.stream().anyMatch(x -> x.getAssignmentId().equals(assignmentId)))
+							{
+								assignment = (Assignment)assignments.stream().filter(x -> x.getAssignmentId().equals(assignmentId)).toArray()[0];
+							}
+							else
+							{
+								System.out.println(ANSI_RED + "\nAssignment with this ID isn't exist.\n" + ANSI_RESET);
+								break;
+							}
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting assignment isn't successful.\n" + ANSI_RESET);
+							break;
+						}
+
+						if(courses.stream().map(Course::getCourseId).noneMatch(x-> x.equals(assignment.getCourseId())))
+						{
+							System.out.println(ANSI_RED + "\nYou don't have access to this course.\n" + ANSI_RESET);
+							break;
+						}
+
+						Course course = (Course)courses.stream().filter(x -> x.getCourseId().equals(assignment.getCourseId())).toArray()[0];
+
+						try
+						{
+							DataBase.removeAssignment(assignment);
+
+							course.deleteAssignment(assignmentId);
+							DataBase.addCourse(course);
+
+							System.out.println(ANSI_GREEN + "\nDeleting assignment is successful.\n" + ANSI_RESET);
+							break;
+						}
+						catch(IOException | ClassNotFoundException e)
+						{
+							System.out.println(ANSI_RED + "\nError: Deleting assignment isn't successful.\n" + ANSI_RESET);
+						}
 
 						break;
 					}
