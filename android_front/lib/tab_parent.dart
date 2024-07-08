@@ -13,6 +13,7 @@ class TabParent extends StatelessWidget {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
           bottom: const TabBar(
             labelColor: Colors.blueAccent,

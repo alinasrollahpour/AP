@@ -27,6 +27,7 @@ class Sara extends StatelessWidget {
           style: TextStyle(fontSize: 26),
         ),
         currentJobs(context),
+        line(context),
         Text(
           'تمرین های انجام شده',
           style: TextStyle(fontSize: 26),
@@ -62,7 +63,15 @@ class Sara extends StatelessWidget {
   }
 
   Widget done(BuildContext context) {
-    return Placeholder();
+    //temporary
+    String text1 = 'تمرین 1';
+    String text2 = 'تمرین 2';
+    return Row(
+      children: [
+        done_assignment(context, text1),
+        done_assignment(context, text2)
+      ],
+    );
   }
 
   //inner widgets#########
@@ -93,9 +102,11 @@ class Sara extends StatelessWidget {
       child: RoundedContainer(
         child: Column(
           children: [
-            Icon(Icons.stars_sharp,
+            Icon(
+              Icons.stars_sharp,
               color: Colors.yellow.shade800,
-              size: 40,),
+              size: 40,
+            ),
             Text(
               'بهترین نمره',
               style: TextStyle(fontSize: 20),
@@ -112,9 +123,11 @@ class Sara extends StatelessWidget {
       child: RoundedContainer(
         child: Column(
           children: [
-            Icon(Icons.upcoming_outlined,
+            Icon(
+              Icons.upcoming_outlined,
               color: Colors.green,
-              size: 40,),
+              size: 40,
+            ),
             Text(
               'چند تا تمرین داری',
               style: TextStyle(fontSize: 20),
@@ -131,9 +144,11 @@ class Sara extends StatelessWidget {
       child: RoundedContainer(
         child: Column(
           children: [
-            Icon(Icons.not_interested_outlined,
+            Icon(
+              Icons.not_interested_outlined,
               color: Colors.redAccent,
-              size: 40,),
+              size: 40,
+            ),
             Text(
               'چند تا ددلاین پرید',
               style: TextStyle(fontSize: 20),
@@ -167,6 +182,28 @@ class Sara extends StatelessWidget {
             Text(
               text,
               style: TextStyle(fontSize: 20),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget done_assignment(BuildContext context, String text) {
+    return SizedBox(
+      width: widthScr / 2,
+      child: RoundedContainer(
+        child: Row(
+          children: [
+            Text(
+              text,
+              style: TextStyle(fontSize: 20),
+            ),
+            Expanded(child: SizedBox()),
+            Icon(
+              Icons.task_outlined,
+              color: Colors.green,
+              size: 30,
             )
           ],
         ),
