@@ -15,6 +15,11 @@ class TabParent extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(
+            labelColor: Colors.blueAccent,
+            indicatorColor: Colors.blueAccent,
+            dividerHeight: 2,
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelStyle: TextStyle(fontSize: 20),
             tabs: [
               Tab(icon: Icon(Icons.home_outlined, ),
                   child: Text("سرا")),
