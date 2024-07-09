@@ -1,9 +1,7 @@
 package MiniProject;
 
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
