@@ -5,11 +5,26 @@ import 'package:android_front/login_page/login.dart';
 import 'package:android_front/signup_page/signup.dart';
 import 'dart:io';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'classes/Assignment.dart';
+import 'classes/Course.dart';
+import 'classes/Student.dart';
+import 'classes/Teacher.dart';
 
 class Base {
-  bool isConnected = false;
-  //socket sock
 
+  bool isConnected = false;
+  late Student student;
+  late Set<Course> courses;
+  late Set<Teacher> teachers;
+  late Set<Assignment> assignments;
+  //todo:socket sock
+
+  //incomplete
+  //do all nessecary jobs at startup
+  //including connecting and setting miniProject objects
+  static bool init() {
+    return false;
+  }
   //incomplete
   //connect to 10.0.2.2:port
   static bool connect(String port) {
@@ -31,9 +46,15 @@ class Base {
       String passwd, String passwd2){
     return false;
   }
+
+  static double getWorstScore() {
+    return 0.0; //todo
+  }
 }
 
 void main() {
+  //prepare connection and objects
+  Base.init();
   runApp(const MyApp());
 }
 
