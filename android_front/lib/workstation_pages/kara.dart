@@ -6,7 +6,7 @@ class Kara extends StatelessWidget {
   late List<String> details;
   @override
   Widget build(BuildContext context) {
-    for (Assignment a : )
+    //for (Assignment a : )
     return Placeholder();
   }
 }
