@@ -13,7 +13,6 @@ class Kara extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //for (Assignment a : )
     return Placeholder();
   }
 }

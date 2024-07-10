@@ -89,5 +89,5 @@ class Base {
   int getLostAssignment() {
     return 0; //todo
   }
-  
+
 }
