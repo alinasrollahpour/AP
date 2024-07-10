@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:android_front/ali_button.dart';
 import 'package:android_front/ali_container.dart';
 
+import '../base.dart';
+
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  Base base;
+  ProfilePage({super.key, required this.base});
 
   @override
   Widget build(BuildContext context) {

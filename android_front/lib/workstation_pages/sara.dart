@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../ali_container.dart';
+import '../base.dart';
 
 class Sara extends StatelessWidget {
   late double widthScr;
   late double heightScr;
+  Base base;
+  Sara({required this.base});
 
   @override
   Widget build(BuildContext context) {

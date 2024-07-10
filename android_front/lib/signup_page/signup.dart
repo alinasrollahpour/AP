@@ -7,8 +7,11 @@ import 'package:android_front/ali_container.dart';
 import 'package:android_front/login_page/number_field.dart';
 import 'package:android_front/login_page/password_field.dart';
 
+import '../base.dart';
+
 class SignupPage extends StatelessWidget {
-  const SignupPage({super.key});
+  Base base;
+  SignupPage({super.key, required this.base});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +83,7 @@ class SignupPage extends StatelessWidget {
                     textColor: Colors.black,
                     onPressed: () {Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                      MaterialPageRoute(builder: (context) => LoginPage(base: base,)),
                     );}),
               )
             ])),

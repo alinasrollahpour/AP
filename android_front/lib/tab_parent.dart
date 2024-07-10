@@ -1,4 +1,5 @@
 import 'package:android_front/ali_text_field.dart';
+import 'package:android_front/profile_page/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:android_front/workstation_pages/kara.dart';
 import 'package:android_front/workstation_pages/sara.dart';
@@ -6,16 +7,30 @@ import 'package:android_front/workstation_pages/kelasa.dart';
 import 'package:android_front/workstation_pages/khabara.dart';
 import 'package:android_front/workstation_pages/tamrina.dart';
 
+import 'base.dart';
+
 
 class TabParent extends StatelessWidget {
+  Base base;
+  TabParent({required this.base});
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
+        drawer: ElevatedButton(
+          child: Icon(Icons.person),
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ProfilePage(base: base)),
+            );
+          },
+        ),
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
-          bottom: const TabBar(
+          bottom: TabBar(
             labelColor: Colors.blueAccent,
             indicatorColor: Colors.blueAccent,
             dividerHeight: 2,
@@ -41,8 +56,8 @@ class TabParent extends StatelessWidget {
             height: 2000,
             child: TabBarView(
               children: [
-                Sara(),
-                Kara(),
+                Sara(base: base,),
+                Kara(base: base,),
                 Kelasa(),
                 Khabara(),
                 Tamrina()

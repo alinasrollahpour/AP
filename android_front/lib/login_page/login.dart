@@ -1,3 +1,4 @@
+import 'package:android_front/tab_parent.dart';
 import 'package:flutter/material.dart';
 import 'package:android_front/ali_button.dart';
 import 'package:android_front/ali_container.dart';
@@ -5,9 +6,15 @@ import 'package:android_front/login_page/number_field.dart';
 import 'package:android_front/login_page/password_field.dart';
 import 'package:android_front/signup_page/signup.dart';
 import 'package:android_front/main.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../base.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  Base base;
+  TextEditingController sidController = TextEditingController();
+  TextEditingController passwdController = TextEditingController();
+  LoginPage({required this.base});
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +32,29 @@ class LoginPage extends StatelessWidget {
               children: [
                 NumberField(
                   labelText: 'شماره دانشجویی',
-                  controller: TextEditingController(),
+                  controller: sidController,
                   icon: const Icon(Icons.account_circle_outlined),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
                   child: PasswordField(
                     labelText: 'گذرواژه',
-                    controller: TextEditingController(),
+                    controller: passwdController,
                   ),
                 )
               ],
             )),
         RoundedButton(
           text: "   ورود   ",
-          onPressed: () {Base.login("s_id", "passwd");},
+          onPressed: () {
+            if (base.login(sidController.text, passwdController.text)){
+              print("login successfully");
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TabParent(base: base)),
+              );
+            }
+            },
           textColor: Colors.white,
           color: Colors.blueAccent,
           fontSize: 30,
@@ -53,7 +68,7 @@ class LoginPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const SignupPage()),
+                  MaterialPageRoute(builder: (context) => SignupPage(base: base)),
                 );
               }),
         )
