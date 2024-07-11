@@ -8,10 +8,11 @@ import 'package:android_front/workstation_pages/khabara.dart';
 import 'package:android_front/workstation_pages/tamrina.dart';
 
 import 'base.dart';
-
+import 'login_page/login.dart';
 
 class TabParent extends StatelessWidget {
   Base base;
+
   TabParent({required this.base});
 
   @override
@@ -19,14 +20,52 @@ class TabParent extends StatelessWidget {
     return DefaultTabController(
       length: 5,
       child: Scaffold(
-        drawer: ElevatedButton(
-          child: Icon(Icons.person),
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilePage(base: base)),
-            );
-          },
+        drawer: Drawer(
+          surfaceTintColor: Colors.blueAccent,
+
+          child: Column(
+            children: [
+              Padding(padding: EdgeInsets.fromLTRB(0, 50, 0, 0)),
+              ElevatedButton(
+                child: Row(
+                  children: [
+                    Icon(Icons.person),
+                    Text(
+                      'اطلاعات شخصی',
+                      style: TextStyle(fontSize: 21),
+                    )
+                  ],
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(base: base)),
+                  );
+                },
+              ),
+              ElevatedButton(
+                child: Row(
+                  children: [
+                    Icon(Icons.logout_outlined),
+                    Text(
+                      'خروج از سامانه',
+                      style: TextStyle(fontSize: 21),
+                    )
+                  ],
+                ),
+                onPressed: () {
+                  base.loggedIn = false;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LoginPage(base: base)),
+                  );
+                },
+              )
+            ],
+          ),
+          //logout
         ),
         backgroundColor: Colors.grey.shade100,
         appBar: AppBar(
@@ -37,18 +76,19 @@ class TabParent extends StatelessWidget {
             indicatorSize: TabBarIndicatorSize.tab,
             labelStyle: TextStyle(fontSize: 20),
             tabs: [
-              Tab(icon: Icon(Icons.home_outlined, ),
+              Tab(
+                  icon: Icon(
+                    Icons.home_outlined,
+                  ),
                   child: Text("سرا")),
-              Tab(icon: Icon(Icons.task_alt),
-              child: Text("کارا"),),
-              Tab(icon: Icon(Icons.class_outlined),
-                  child: Text("کلاسا")),
-              Tab(icon: Icon(Icons.announcement_outlined),
-                  child: Text("خبرا")),
-              Tab(icon: Icon(Icons.note_alt_outlined),
-                  child: Text("تمرینا")),
+              Tab(
+                icon: Icon(Icons.task_alt),
+                child: Text("کارا"),
+              ),
+              Tab(icon: Icon(Icons.class_outlined), child: Text("کلاسا")),
+              Tab(icon: Icon(Icons.announcement_outlined), child: Text("خبرا")),
+              Tab(icon: Icon(Icons.note_alt_outlined), child: Text("تمرینا")),
             ],
-
           ),
         ),
         body: SingleChildScrollView(
@@ -56,8 +96,12 @@ class TabParent extends StatelessWidget {
             height: 2000,
             child: TabBarView(
               children: [
-                Sara(base: base,),
-                Kara(base: base,),
+                Sara(
+                  base: base,
+                ),
+                Kara(
+                  base: base,
+                ),
                 Kelasa(),
                 Khabara(),
                 Tamrina()

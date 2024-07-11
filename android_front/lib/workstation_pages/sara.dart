@@ -8,6 +8,7 @@ class Sara extends StatelessWidget {
   late double widthScr;
   late double heightScr;
   Base base;
+
   Sara({required this.base});
 
   @override

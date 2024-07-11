@@ -8,7 +8,6 @@ import 'classes/Student.dart';
 import 'classes/Teacher.dart';
 
 class Base {
-
   bool isConnected = false;
   bool loggedIn = false;
   late Student student;
@@ -20,23 +19,29 @@ class Base {
   final String host = '10.0.2.2';
   final int port = 8080;
 
-
   //incomplete
   //do all nessecary jobs at startup
   //including connecting and setting miniProject objects
-  Base(){
-    //todo
+  Base() {
+    connect().then((result) {
+      isConnected = result;
+      if (!isConnected) {
+        Fluttertoast.showToast(msg: 'Couldn`t connect!');
+      }
+    });
   }
+
   //incomplete
   //connect to 10.0.2.2:port
   Future<bool> connect() async {
     try {
       final Socket socket = await Socket.connect(host, port);
-      print('Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
+      print(
+          'Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
 
       // Listen for responses from the server
       socket.listen(
-            (List<int> event) {
+        (List<int> event) {
           print('Server: ${String.fromCharCodes(event)}');
         },
         onError: (error) {
@@ -48,14 +53,13 @@ class Base {
           socket.destroy();
         },
       );
-
     } catch (e) {
       print('Unable to connect: $e');
     }
     return false;
   }
 
-  Future<void> disconnect() async{
+  Future<void> disconnect() async {
     await socket.flush();
     await socket.close();
   }
@@ -72,22 +76,24 @@ class Base {
   //incomplete
   //shows related toast notifications and returns false
   //if successful returns true
-  bool signup(String name, String s_id, String u_id,
-      String passwd, String passwd2){
+  bool signup(
+      String name, String s_id, String u_id, String passwd, String passwd2) {
     return false;
   }
 
   double getWorstScore() {
     return 0.0; //todo
   }
+
   double getBestScore() {
     return 0.0; //todo
   }
+
   int getAssigmentCount() {
     return 0; //todo
   }
+
   int getLostAssignment() {
     return 0; //todo
   }
-
 }
